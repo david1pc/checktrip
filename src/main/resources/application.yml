@@ -9,7 +9,7 @@ management:
 
 info:
   application:
-    name: checktrip-back
+    name: checktrip
     description: An checktrip app
     author: David Rodriguez
     version: '@project.version@'
