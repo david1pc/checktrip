@@ -19,4 +19,17 @@ public class ChecktripBackApplication {
     public static void main(String[] args) {
         SpringApplication.run(ChecktripBackApplication.class, args);
     }
+
+    @Profile({"dev","prod"})
+    @Bean
+    CommandLineRunner run(RoleRepo roleRepo) {
+        return args -> {
+            List<Role> roles = roleRepo.findAll();
+            if(roles.isEmpty()) {
+                Role role = new Role("CLIENT");
+                role.setCodigo(0);
+                roleRepo.save(role);
+            }
+        };
+    }
 }
