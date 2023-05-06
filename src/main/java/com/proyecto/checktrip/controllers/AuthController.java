@@ -1,6 +1,7 @@
 package com.proyecto.checktrip.controllers;
 
 import com.proyecto.checktrip.dto.ClientRequestDTO;
+import com.proyecto.checktrip.dto.ClientResponseDTO;
 import com.proyecto.checktrip.dto.LoginDTO;
 import com.proyecto.checktrip.entities.Client;
 import com.proyecto.checktrip.services.ClientServiceImpl;
@@ -49,13 +50,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String createClient(@RequestBody ClientRequestDTO client) {
-        try {
-            Client client_save = this.clientService.createClient(client);
-            return "El cliente " + client_save.getPersona().getUsername() + ", ha sido creado con exito";
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+    public ClientResponseDTO createClient(@RequestBody ClientRequestDTO client) {
+        ClientResponseDTO newClient = this.clientService.createClient(client);
+        return newClient;
     }
 
 

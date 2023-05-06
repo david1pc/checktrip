@@ -1,10 +1,12 @@
 package com.proyecto.checktrip.services;
 
 import com.proyecto.checktrip.dto.ClientRequestDTO;
+import com.proyecto.checktrip.dto.ClientResponseDTO;
 import com.proyecto.checktrip.entities.Client;
 import com.proyecto.checktrip.entities.Person;
 import com.proyecto.checktrip.entities.Role;
 import com.proyecto.checktrip.entities.RoleClient;
+import com.proyecto.checktrip.exceptions.PersonaYaExiste;
 import com.proyecto.checktrip.repo.ClientRepo;
 import com.proyecto.checktrip.repo.PersonRepo;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +22,11 @@ public class ClientServiceImpl implements ClientService{
     private final PersonRepo personRepo;
 
     @Override
-    public Client createClient(ClientRequestDTO clientRequestDTO) throws Exception {
-        // Antes de guardar verificar si ya existe una persona con el mismo correo o username
+    public ClientResponseDTO createClient(ClientRequestDTO clientRequestDTO) {
+        personRepo.findFirstByCorreoOrUsername(clientRequestDTO.person().correo(), clientRequestDTO.person().username())
+                .ifPresent((user) -> {
+                    throw new PersonaYaExiste("El username o correo ya ha esta siendo usado por alguien más");
+                });
         Person person = Person.builder()
                 .apellidos(clientRequestDTO.person().apellidos())
                 .nombres(clientRequestDTO.person().nombres())
@@ -39,11 +44,15 @@ public class ClientServiceImpl implements ClientService{
         Client client_save = this.clientRepo.save(client);
         Role role = this.roleService.findById(1).get();
         this.roleService.createRoleClient(new RoleClient(role, client_save));
-        return this.clientRepo.findById(client_save.getCodigo()).get();
+        return ClientResponseDTO.builder()
+                .nombres(client_save.getPersona().getNombres())
+                .apellidos(client_save.getPersona().getApellidos())
+                .codigo(client_save.getCodigo())
+                .build();
     }
 
     @Override
-    public Person findClientByUsername(String username) throws Exception {
+    public Person findClientByUsername(String username) {
         return this.personRepo.findByUsername(username);
     }
 }
