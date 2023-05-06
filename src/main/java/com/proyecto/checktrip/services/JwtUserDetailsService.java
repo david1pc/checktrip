@@ -1,6 +1,6 @@
 package com.proyecto.checktrip.services;
 
-import com.proyecto.checktrip.entities.Client;
+import com.proyecto.checktrip.entities.Person;
 import com.proyecto.checktrip.entities.Role;
 import lombok.SneakyThrows;
 import org.apache.commons.logging.Log;
@@ -31,13 +31,13 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try{
-            Client client = this.clientService.findClientByUsername(username);
+            Person person = this.clientService.findClientByUsername(username);
             List<Role> rolesClient = this.roleService.findClientRolesByUsername(username);
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
             for(Role role : rolesClient){
                 authorities.add(new SimpleGrantedAuthority(role.getNombre()));
             }
-            UserDetails userDetails = new User(client.getUsername(), client.getPassword(), authorities);
+            UserDetails userDetails = new User(person.getUsername(), person.getPassword(), authorities);
             return userDetails;
         }catch(Exception e){
             throw new Exception("El username o contraseña es incorrecto");

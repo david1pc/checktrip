@@ -4,28 +4,27 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
-@Table(name = "client")
+@Builder
 @Entity(name = "Client")
-public class Client extends Person {
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer codigo;
 
+    @OneToOne
+    private Person persona;
+
     @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "client")
     private List<RoleClient> roles;
-
-    public Client(String nombres, String apellidos, LocalDate fecha_nacimiento, String correo, String username, String password) {
-        super(nombres, apellidos, fecha_nacimiento, correo, username, password);
-    }
 }
