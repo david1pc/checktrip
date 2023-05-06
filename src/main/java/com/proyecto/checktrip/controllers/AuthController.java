@@ -5,6 +5,8 @@ import com.proyecto.checktrip.dto.ClientResponseDTO;
 import com.proyecto.checktrip.dto.LoginDTO;
 import com.proyecto.checktrip.services.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,13 +27,13 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDTO login) {
+    public ResponseEntity<String> login(@RequestBody LoginDTO login) {
         try {
             Authentication authentication = autenticarUsuario(login.username(), login.password());
             String token = tokenService.generateToken(authentication);
-            return token;
+            return new ResponseEntity<>(token, HttpStatus.OK);
         } catch (Exception e) {
-            return e.getMessage();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
