@@ -24,4 +24,5 @@ public class Person {
     private String correo;
     private String username;
     private String password;
+    private Boolean estado;
 }

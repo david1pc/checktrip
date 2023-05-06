@@ -34,6 +34,7 @@ public class ClientServiceImpl implements ClientService{
                 .fecha_nacimiento(clientRequestDTO.person().fecha_nacimiento())
                 .password(this.passwordEncoder.encode(clientRequestDTO.person().password()))
                 .username(clientRequestDTO.person().username())
+                .estado(true)
                 .build();
 
         Person newPerson = personRepo.save(person);
@@ -53,6 +54,6 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     public Person findClientByUsername(String username) {
-        return this.personRepo.findByUsername(username);
+        return this.personRepo.findByUsername(username).get();
     }
 }
