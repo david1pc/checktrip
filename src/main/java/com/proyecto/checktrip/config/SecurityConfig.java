@@ -42,6 +42,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable())
                 .authorizeHttpRequests().requestMatchers("/api/auth/login", "/api/auth/register").permitAll().and()
                 .authorizeHttpRequests().anyRequest().authenticated().and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
