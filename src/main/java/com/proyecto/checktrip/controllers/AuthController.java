@@ -20,17 +20,19 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class AuthController {
     private final ClientServiceImpl clientService;
-    private final PersonServiceImpl personService;
-    private final TokenService tokenServicio;
+    private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
 
 
     @PostMapping("/login")
     public String login(@RequestBody LoginDTO login) {
-        personService.verificarLogin(login);
-        Authentication authentication = autenticarUsuario(login.username(), login.password());
-        String token = tokenServicio.generateToken(authentication);
-        return token;
+        try {
+            Authentication authentication = autenticarUsuario(login.username(), login.password());
+            String token = tokenService.generateToken(authentication);
+            return token;
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     @PostMapping("/register")
