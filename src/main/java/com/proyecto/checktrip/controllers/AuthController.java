@@ -6,6 +6,11 @@ import com.proyecto.checktrip.dto.LoginDTO;
 import com.proyecto.checktrip.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -16,11 +21,15 @@ import java.security.Principal;
 public class AuthController {
     private final ClientServiceImpl clientService;
     private final PersonServiceImpl personService;
+    private final TokenService tokenServicio;
+    private final AuthenticationManager authenticationManager;
 
 
     @PostMapping("/login")
     public String login(@RequestBody LoginDTO login) {
-        String token = personService.loguearse(login);
+        personService.verificarLogin(login);
+        Authentication authentication = autenticarUsuario(login.username(), login.password());
+        String token = tokenServicio.generateToken(authentication);
         return token;
     }
 
@@ -35,5 +44,15 @@ public class AuthController {
     @GetMapping("/index")
     public String index(Principal principal){
         return "Hola " + principal.getName();
+    }
+
+    public Authentication autenticarUsuario(String username, String password) {
+        try{
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        }catch(DisabledException e){
+            throw new DisabledException("Usuario deshabilitado");
+        }catch(BadCredentialsException e){
+            throw new BadCredentialsException("El username o contraseña es incorrecto");
+        }
     }
 }

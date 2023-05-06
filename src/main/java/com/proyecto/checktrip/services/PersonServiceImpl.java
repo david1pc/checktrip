@@ -17,15 +17,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PersonServiceImpl {
     private final PersonRepo personRepo;
-    private final TokenService tokenServicio;
-    private final AuthenticationManager authenticationManager;
 
-    public String loguearse(LoginDTO login){
+
+    public void verificarLogin(LoginDTO login){
         Boolean estado_persona = obtenerEstadoPersona(login.username());
         verificarEstadoPersona(login.username(), estado_persona);
-        Authentication authentication = autenticarUsuario(login.username(), login.password());
-        String token = tokenServicio.generateToken(authentication);
-        return token;
     }
 
     private Boolean obtenerEstadoPersona(String username){
@@ -37,16 +33,6 @@ public class PersonServiceImpl {
     private void verificarEstadoPersona(String username, Boolean estado){
         if (!estado){
             throw new PersonaInactiva("La persona con username " + username + ", se encuentra inactivo");
-        }
-    }
-
-    public Authentication autenticarUsuario(String username, String password) {
-        try{
-            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        }catch(DisabledException e){
-            throw new DisabledException("Usuario deshabilitado");
-        }catch(BadCredentialsException e){
-            throw new BadCredentialsException("El username o contraseña es incorrecto");
         }
     }
 }
