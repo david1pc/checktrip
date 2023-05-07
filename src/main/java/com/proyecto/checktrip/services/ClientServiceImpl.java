@@ -75,7 +75,6 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public Boolean verifyTemporalPasswd(LoginDTO loginDTO) {
         Person person = obtenerPersona(loginDTO.username());
-        verificarEstadoPersona(loginDTO.username(), person.getEstado());
         return person.getPassword_temporal();
     }
 
@@ -85,15 +84,8 @@ public class ClientServiceImpl implements ClientService{
     }
 
     private Person obtenerPersona(String username){
-        Person persona = personRepo.findByUsername(username)
-                .orElseThrow(() -> new PersonaNoExiste("No existe una persona con el username " + username));
+        Person persona = personRepo.findByUsername(username).get();
         return persona;
-    }
-
-    private void verificarEstadoPersona(String username, Boolean estado){
-        if (!estado){
-            throw new PersonaInactiva("La persona con username " + username + ", se encuentra inactivo");
-        }
     }
 
     private String generarCadenaAleatoria() {
