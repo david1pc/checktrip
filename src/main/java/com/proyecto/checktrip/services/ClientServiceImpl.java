@@ -60,7 +60,7 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     public AccountRecoveryResponseDTO recoverAccount(AccountRecoveryRequestDTO accountRecoveryRequestDTO) {
-        personRepo.findByUsername(accountRecoveryRequestDTO.correo())
+        personRepo.findByCorreo(accountRecoveryRequestDTO.correo())
                 .ifPresent((user) -> {
                     String newPasswd = generarCadenaAleatoria();
                     user.setPassword(this.passwordEncoder.encode(newPasswd));
