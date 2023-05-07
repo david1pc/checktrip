@@ -30,10 +30,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO login) {
-        if (this.clientService.verifyTemporalPasswd(login)){
-            return new ResponseEntity<>(login, HttpStatus.UPGRADE_REQUIRED);
-        }
         try {
+            if (this.clientService.verifyTemporalPasswd(login)){
+                return new ResponseEntity<>(login, HttpStatus.UPGRADE_REQUIRED);
+            }
             Authentication authentication = autenticarUsuario(login.username(), login.password());
             String token = tokenService.generateToken(authentication);
             LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder()
