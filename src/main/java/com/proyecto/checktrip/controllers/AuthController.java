@@ -3,6 +3,7 @@ package com.proyecto.checktrip.controllers;
 import com.proyecto.checktrip.dto.ClientRequestDTO;
 import com.proyecto.checktrip.dto.ClientResponseDTO;
 import com.proyecto.checktrip.dto.LoginDTO;
+import com.proyecto.checktrip.dto.LoginResponseDTO;
 import com.proyecto.checktrip.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,6 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:4200",
-        methods = {RequestMethod.POST,
-        RequestMethod.GET
-})
 @RequiredArgsConstructor
 public class AuthController {
     private final ClientServiceImpl clientService;
@@ -31,11 +28,15 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO login) {
+    public ResponseEntity<?> login(@RequestBody LoginDTO login) {
         try {
             Authentication authentication = autenticarUsuario(login.username(), login.password());
             String token = tokenService.generateToken(authentication);
-            return new ResponseEntity<>(token, HttpStatus.OK);
+            LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder()
+                    .username(login.username())
+                    .token(token)
+                    .build();
+            return new ResponseEntity<>(loginResponseDTO, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
