@@ -30,16 +30,20 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO login) {
-        try {
-            Authentication authentication = autenticarUsuario(login.username(), login.password());
-            String token = tokenService.generateToken(authentication);
-            LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder()
-                    .username(login.username())
-                    .token(token)
-                    .build();
-            return new ResponseEntity<>(loginResponseDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        if (!this.clientService.verifyTemporalPasswd(login)){
+            try {
+                Authentication authentication = autenticarUsuario(login.username(), login.password());
+                String token = tokenService.generateToken(authentication);
+                LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder()
+                        .username(login.username())
+                        .token(token)
+                        .build();
+                return new ResponseEntity<>(loginResponseDTO, HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+        }else{
+            return new ResponseEntity<>(login, HttpStatus.UPGRADE_REQUIRED);
         }
     }
 

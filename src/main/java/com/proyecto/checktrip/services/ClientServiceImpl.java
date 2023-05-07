@@ -1,13 +1,12 @@
 package com.proyecto.checktrip.services;
 
-import com.proyecto.checktrip.dto.AccountRecoveryRequestDTO;
-import com.proyecto.checktrip.dto.AccountRecoveryResponseDTO;
-import com.proyecto.checktrip.dto.ClientRequestDTO;
-import com.proyecto.checktrip.dto.ClientResponseDTO;
+import com.proyecto.checktrip.dto.*;
 import com.proyecto.checktrip.entities.Client;
 import com.proyecto.checktrip.entities.Person;
 import com.proyecto.checktrip.entities.Role;
 import com.proyecto.checktrip.entities.RoleClient;
+import com.proyecto.checktrip.exceptions.PersonaInactiva;
+import com.proyecto.checktrip.exceptions.PersonaNoExiste;
 import com.proyecto.checktrip.exceptions.PersonaYaExiste;
 import com.proyecto.checktrip.repo.ClientRepo;
 import com.proyecto.checktrip.repo.PersonRepo;
@@ -71,6 +70,30 @@ public class ClientServiceImpl implements ClientService{
         return AccountRecoveryResponseDTO.builder()
                 .descripcion("Si el correo ingresado corresponde a una cuenta registrada en CheckTrip, le solicitamos que verifique su correo ya que se le ha enviado una contraseña temporal")
                 .build();
+    }
+
+    @Override
+    public Boolean verifyTemporalPasswd(LoginDTO loginDTO) {
+        Person person = obtenerPersona(loginDTO.username());
+        verificarEstadoPersona(loginDTO.username(), person.getEstado());
+        return person.getPassword_temporal();
+    }
+
+    @Override
+    public AccountRecoveryResponseDTO updateAccount(LoginDTO loginDTO) {
+        return null;
+    }
+
+    private Person obtenerPersona(String username){
+        Person persona = personRepo.findByUsername(username)
+                .orElseThrow(() -> new PersonaNoExiste("No existe una persona con el username " + username));
+        return persona;
+    }
+
+    private void verificarEstadoPersona(String username, Boolean estado){
+        if (!estado){
+            throw new PersonaInactiva("La persona con username " + username + ", se encuentra inactivo");
+        }
     }
 
     private String generarCadenaAleatoria() {
