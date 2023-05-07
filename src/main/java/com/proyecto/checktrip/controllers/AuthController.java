@@ -21,7 +21,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200",
+@CrossOrigin(origins = {"http://localhost:4200", "https://checktrip-software.web.app/"},
         methods = {RequestMethod.POST,
                 RequestMethod.GET
         })
