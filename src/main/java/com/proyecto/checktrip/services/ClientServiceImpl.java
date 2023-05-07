@@ -75,7 +75,11 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public Boolean verifyTemporalPasswd(LoginDTO loginDTO) {
         Person person = obtenerPersona(loginDTO.username());
-        return person.getPassword_temporal();
+        Boolean respuesta = person.getPassword_temporal();
+        if(person == null){
+            respuesta = false;
+        }
+        return respuesta;
     }
 
     @Override
