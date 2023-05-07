@@ -11,6 +11,7 @@ import com.proyecto.checktrip.exceptions.PersonaYaExiste;
 import com.proyecto.checktrip.repo.ClientRepo;
 import com.proyecto.checktrip.repo.PersonRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -83,8 +84,23 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
-    public AccountRecoveryResponseDTO updateAccount(LoginDTO loginDTO) {
-        return null;
+    public ClientPasswdResponseDTO updateAccount(ClientPasswdRequestDTO client) {
+        Person person = obtenerPersonaVerificada(client.username());
+        if(this.passwordEncoder.matches(client.password(), person.getPassword())){
+            person.setPassword_temporal(false);
+            person.setPassword(this.passwordEncoder.encode(client.newPassword()));
+            return ClientPasswdResponseDTO.builder()
+                    .descripcion("Se ha actualizado la password con exito.")
+                    .build();
+        }else{
+            throw new BadCredentialsException("El username o contraseña es incorrecto");
+        }
+    }
+
+    private Person obtenerPersonaVerificada(String username){
+        Person persona = personRepo.findByUsername(username)
+                .orElseThrow(() -> new PersonaNoExiste("El username o contraseña es incorrecto"));
+        return persona;
     }
 
     private Person obtenerPersona(String username){

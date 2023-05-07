@@ -52,6 +52,12 @@ public class AuthController {
         return newClient;
     }
 
+    @PostMapping("/update-passwd")
+    public ClientPasswdResponseDTO updatePasswdClient(@RequestBody ClientPasswdRequestDTO client) {
+        ClientPasswdResponseDTO clientPasswdResponseDTO = this.clientService.updateAccount(client);
+        return clientPasswdResponseDTO;
+    }
+
     @PostMapping("/recover-account")
     public AccountRecoveryResponseDTO recoverAccount(@RequestBody AccountRecoveryRequestDTO accountRecoveryRequestDTO){
         AccountRecoveryResponseDTO response = this.clientService.recoverAccount(accountRecoveryRequestDTO);
