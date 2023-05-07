@@ -19,6 +19,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class AuthController {
     private final ClientServiceImpl clientService;
