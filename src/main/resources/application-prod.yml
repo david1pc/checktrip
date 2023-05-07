@@ -11,3 +11,15 @@ spring:
     show-sql: 'true'
     hibernate:
       ddl-auto: update
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+            required: 'true'
+          auth: 'true'
+    host: smtp.gmail.com
+    username: checktripcomunica@gmail.com
+    password: bpfnrnljnotcylvx
+    port: '587'

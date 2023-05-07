@@ -25,4 +25,5 @@ public class Person {
     private String username;
     private String password;
     private Boolean estado;
+    private Boolean password_temporal;
 }

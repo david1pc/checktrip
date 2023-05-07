@@ -1,5 +1,7 @@
 package com.proyecto.checktrip.services;
 
+import com.proyecto.checktrip.dto.AccountRecoveryRequestDTO;
+import com.proyecto.checktrip.dto.AccountRecoveryResponseDTO;
 import com.proyecto.checktrip.dto.ClientRequestDTO;
 import com.proyecto.checktrip.dto.ClientResponseDTO;
 import com.proyecto.checktrip.entities.Client;
@@ -13,11 +15,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService{
     private final ClientRepo clientRepo;
     private final RoleServiceImpl roleService;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final PersonRepo personRepo;
 
@@ -34,6 +39,7 @@ public class ClientServiceImpl implements ClientService{
                 .fecha_nacimiento(clientRequestDTO.person().fecha_nacimiento())
                 .password(this.passwordEncoder.encode(clientRequestDTO.person().password()))
                 .username(clientRequestDTO.person().username())
+                .password_temporal(false)
                 .estado(true)
                 .build();
 
@@ -50,6 +56,33 @@ public class ClientServiceImpl implements ClientService{
                 .apellidos(client_save.getPersona().getApellidos())
                 .codigo(client_save.getCodigo())
                 .build();
+    }
+
+    @Override
+    public AccountRecoveryResponseDTO recoverAccount(AccountRecoveryRequestDTO accountRecoveryRequestDTO) {
+        personRepo.findByUsername(accountRecoveryRequestDTO.correo())
+                .ifPresent((user) -> {
+                    String newPasswd = generarCadenaAleatoria();
+                    user.setPassword(this.passwordEncoder.encode(newPasswd));
+                    user.setPassword_temporal(true);
+                    personRepo.save(user);
+                    this.emailService.enviarCorreo("Recuperación de cuenta - CheckTrip", "La nueva password es la siguiente: " + newPasswd, user.getCorreo());
+                });
+        return AccountRecoveryResponseDTO.builder()
+                .descripcion("Si el correo ingresado corresponde a una cuenta registrada en CheckTrip, le solicitamos que verifique su correo ya que se le ha enviado una contraseña temporal")
+                .build();
+    }
+
+    private String generarCadenaAleatoria() {
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random rnd = new Random();
+        int longitud = rnd.nextInt(6) + 5;
+        StringBuilder sb = new StringBuilder(longitud);
+        for (int i = 0; i < longitud; i++) {
+            int index = rnd.nextInt(caracteres.length());
+            sb.append(caracteres.charAt(index));
+        }
+        return sb.toString();
     }
 
     @Override

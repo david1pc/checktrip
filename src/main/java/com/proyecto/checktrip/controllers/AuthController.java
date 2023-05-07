@@ -1,9 +1,6 @@
 package com.proyecto.checktrip.controllers;
 
-import com.proyecto.checktrip.dto.ClientRequestDTO;
-import com.proyecto.checktrip.dto.ClientResponseDTO;
-import com.proyecto.checktrip.dto.LoginDTO;
-import com.proyecto.checktrip.dto.LoginResponseDTO;
+import com.proyecto.checktrip.dto.*;
 import com.proyecto.checktrip.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,6 +47,12 @@ public class AuthController {
     public ClientResponseDTO createClient(@RequestBody ClientRequestDTO client) {
         ClientResponseDTO newClient = this.clientService.createClient(client);
         return newClient;
+    }
+
+    @PostMapping("/recover-account")
+    public AccountRecoveryResponseDTO recoverAccount(@RequestBody AccountRecoveryRequestDTO accountRecoveryRequestDTO){
+        AccountRecoveryResponseDTO response = this.clientService.recoverAccount(accountRecoveryRequestDTO);
+        return response;
     }
 
 
