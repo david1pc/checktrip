@@ -89,6 +89,7 @@ public class ClientServiceImpl implements ClientService{
         if(this.passwordEncoder.matches(client.password(), person.getPassword())){
             person.setPassword_temporal(false);
             person.setPassword(this.passwordEncoder.encode(client.newPassword()));
+            personRepo.save(person);
             return ClientPasswdResponseDTO.builder()
                     .descripcion("Se ha actualizado la password con exito.")
                     .build();
