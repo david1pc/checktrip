@@ -5,13 +5,12 @@ import com.proyecto.checktrip.entities.Client;
 import com.proyecto.checktrip.entities.Person;
 import com.proyecto.checktrip.entities.Role;
 import com.proyecto.checktrip.entities.RoleClient;
-import com.proyecto.checktrip.exceptions.PersonaInactiva;
+import com.proyecto.checktrip.exceptions.ClientePasswordNoCoincide;
 import com.proyecto.checktrip.exceptions.PersonaNoExiste;
 import com.proyecto.checktrip.exceptions.PersonaYaExiste;
 import com.proyecto.checktrip.repo.ClientRepo;
 import com.proyecto.checktrip.repo.PersonRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -94,14 +93,13 @@ public class ClientServiceImpl implements ClientService{
                     .descripcion("Se ha actualizado la password con exito.")
                     .build();
         }else{
-            throw new BadCredentialsException("El username o contraseña es incorrecto");
+            throw new ClientePasswordNoCoincide("El username o contraseña es incorrecto");
         }
     }
 
     private Person obtenerPersonaVerificada(String username){
-        Person persona = personRepo.findByUsername(username)
+        return personRepo.findByUsername(username)
                 .orElseThrow(() -> new PersonaNoExiste("El username o contraseña es incorrecto"));
-        return persona;
     }
 
     private Person obtenerPersona(String username){
