@@ -29,7 +29,7 @@ public class ClientServiceImpl implements ClientService{
     public ClientResponseDTO createClient(ClientRequestDTO clientRequestDTO) {
         personRepo.findFirstByCorreoOrUsername(clientRequestDTO.person().correo(), clientRequestDTO.person().username())
                 .ifPresent((user) -> {
-                    throw new PersonaYaExiste("El username o correo ya ha esta siendo usado por alguien más");
+                    throw new PersonaYaExiste("El username o correo ya esta siendo usado por alguien más");
                 });
         Person person = Person.builder()
                 .apellidos(clientRequestDTO.person().apellidos())
