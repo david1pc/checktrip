@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 @Service
@@ -24,7 +25,6 @@ public class ClientServiceImpl implements ClientService{
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final PersonRepo personRepo;
-    private final Random rnd;
 
     @Override
     public ClientResponseDTO createClient(ClientRequestDTO clientRequestDTO) {
@@ -36,10 +36,10 @@ public class ClientServiceImpl implements ClientService{
                 .apellidos(clientRequestDTO.person().apellidos())
                 .nombres(clientRequestDTO.person().nombres())
                 .correo(clientRequestDTO.person().correo())
-                .fecha_nacimiento(clientRequestDTO.person().fecha_nacimiento())
+                .fechaNacimiento(clientRequestDTO.person().fecha_nacimiento())
                 .password(this.passwordEncoder.encode(clientRequestDTO.person().password()))
                 .username(clientRequestDTO.person().username())
-                .password_temporal(false)
+                .passwordTemporal(false)
                 .estado(true)
                 .build();
 
@@ -64,7 +64,7 @@ public class ClientServiceImpl implements ClientService{
                 .ifPresent((user) -> {
                     String newPasswd = generarCadenaAleatoria();
                     user.setPassword(this.passwordEncoder.encode(newPasswd));
-                    user.setPassword_temporal(true);
+                    user.setPasswordTemporal(true);
                     personRepo.save(user);
                     this.emailService.enviarCorreo("Recuperación de cuenta - CheckTrip", "La nueva password es la siguiente: " + newPasswd, user.getCorreo());
                 });
@@ -76,10 +76,10 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public Boolean verifyTemporalPasswd(LoginDTO loginDTO) {
         Person person = obtenerPersona(loginDTO.username());
-        if(person == null || person.getPassword_temporal() == null){
+        if(person == null || person.getPasswordTemporal() == null){
             return false;
         }else{
-            return person.getPassword_temporal();
+            return person.getPasswordTemporal();
         }
     }
 
@@ -87,7 +87,7 @@ public class ClientServiceImpl implements ClientService{
     public ClientPasswdResponseDTO updateAccount(ClientPasswdRequestDTO client) {
         Person person = obtenerPersonaVerificada(client.username());
         if(this.passwordEncoder.matches(client.password(), person.getPassword())){
-            person.setPassword_temporal(false);
+            person.setPasswordTemporal(false);
             person.setPassword(this.passwordEncoder.encode(client.newPassword()));
             personRepo.save(person);
             return ClientPasswdResponseDTO.builder()
@@ -104,12 +104,12 @@ public class ClientServiceImpl implements ClientService{
     }
 
     private Person obtenerPersona(String username){
-        Person persona = personRepo.findByUsername(username).get();
-        return persona;
+        return personRepo.findByUsername(username).get();
     }
 
     private String generarCadenaAleatoria() {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random rnd = new Random();
         int longitud = rnd.nextInt(6) + 5;
         StringBuilder sb = new StringBuilder(longitud);
         for (int i = 0; i < longitud; i++) {

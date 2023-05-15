@@ -20,10 +20,10 @@ public class Person {
     private Integer codigo;
     private String nombres;
     private String apellidos;
-    private LocalDate fecha_nacimiento;
+    private LocalDate fechaNacimiento;
     private String correo;
     private String username;
     private String password;
     private Boolean estado;
-    private Boolean password_temporal;
+    private Boolean passwordTemporal;
 }
