@@ -24,6 +24,7 @@ public class ClientServiceImpl implements ClientService{
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final PersonRepo personRepo;
+    private final Random rnd;
 
     @Override
     public ClientResponseDTO createClient(ClientRequestDTO clientRequestDTO) {
@@ -109,7 +110,6 @@ public class ClientServiceImpl implements ClientService{
 
     private String generarCadenaAleatoria() {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        Random rnd = new Random();
         int longitud = rnd.nextInt(6) + 5;
         StringBuilder sb = new StringBuilder(longitud);
         for (int i = 0; i < longitud; i++) {
