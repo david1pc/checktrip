@@ -16,8 +16,8 @@ import java.util.Map;
 
 @ControllerAdvice
 @Component
-public class AccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler{
-    private static final Logger logger = LoggerFactory.getLogger(AccessDeniedHandler.class);
+public class AccessDeniedHandlerSeguridad implements org.springframework.security.web.access.AccessDeniedHandler{
+    private static final Logger logger = LoggerFactory.getLogger(AccessDeniedHandlerSeguridad.class);
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {

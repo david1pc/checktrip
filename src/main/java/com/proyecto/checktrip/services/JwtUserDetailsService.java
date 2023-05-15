@@ -2,9 +2,8 @@ package com.proyecto.checktrip.services;
 
 import com.proyecto.checktrip.entities.Person;
 import com.proyecto.checktrip.entities.Role;
+import com.proyecto.checktrip.exceptions.PersonaNoExiste;
 import lombok.SneakyThrows;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +17,6 @@ import java.util.List;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
-    protected final Log logger = LogFactory.getLog(this.getClass());
     private final ClientServiceImpl clientService;
     private final RoleServiceImpl roleService;
 
@@ -37,10 +35,9 @@ public class JwtUserDetailsService implements UserDetailsService {
             for(Role role : rolesClient){
                 authorities.add(new SimpleGrantedAuthority(role.getNombre()));
             }
-            UserDetails userDetails = new User(person.getUsername(), person.getPassword(), authorities);
-            return userDetails;
+            return new User(person.getUsername(), person.getPassword(), authorities);
         }catch(Exception e){
-            throw new Exception("El username o contraseña es incorrecto");
+            throw new PersonaNoExiste("El username o contraseña es incorrecto");
         }
     }
 

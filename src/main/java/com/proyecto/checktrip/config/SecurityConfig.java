@@ -9,7 +9,6 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,17 +28,16 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     private final RsaKeyProperties rsaKeys;
-    private AuthenticationEntryPoint authenticationEntryPoint;
+    private AuthenticationEntryPointSeguridad authenticationEntryPoint;
     private AccessDeniedHandler accessDeniedHandler;
 
-    public SecurityConfig(RsaKeyProperties rsaKeys, AuthenticationEntryPoint authenticationEntryPoint, AccessDeniedHandler accessDeniedHandler) {
+    public SecurityConfig(RsaKeyProperties rsaKeys, AuthenticationEntryPointSeguridad authenticationEntryPoint, AccessDeniedHandler accessDeniedHandler) {
         this.rsaKeys = rsaKeys;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;

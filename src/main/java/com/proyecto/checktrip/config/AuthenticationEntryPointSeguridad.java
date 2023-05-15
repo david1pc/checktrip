@@ -16,8 +16,8 @@ import java.util.Map;
 
 @ControllerAdvice
 @Component
-public class AuthenticationEntryPoint implements org.springframework.security.web.AuthenticationEntryPoint{
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationEntryPoint.class);
+public class AuthenticationEntryPointSeguridad implements org.springframework.security.web.AuthenticationEntryPoint{
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationEntryPointSeguridad.class);
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {

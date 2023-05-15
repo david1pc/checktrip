@@ -48,8 +48,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ClientResponseDTO createClient(@RequestBody ClientRequestDTO client) {
-        ClientResponseDTO newClient = this.clientService.createClient(client);
-        return newClient;
+        return this.clientService.createClient(client);
     }
 
     @PostMapping("/update-passwd")

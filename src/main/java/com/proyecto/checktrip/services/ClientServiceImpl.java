@@ -47,13 +47,13 @@ public class ClientServiceImpl implements ClientService{
         Client client = Client.builder()
                 .persona(newPerson)
                 .build();
-        Client client_save = this.clientRepo.save(client);
+        Client clientSave = this.clientRepo.save(client);
         Role role = this.roleService.findById(1).get();
-        this.roleService.createRoleClient(new RoleClient(role, client_save));
+        this.roleService.createRoleClient(new RoleClient(role, clientSave));
         return ClientResponseDTO.builder()
-                .nombres(client_save.getPersona().getNombres())
-                .apellidos(client_save.getPersona().getApellidos())
-                .codigo(client_save.getCodigo())
+                .nombres(clientSave.getPersona().getNombres())
+                .apellidos(clientSave.getPersona().getApellidos())
+                .codigo(clientSave.getCodigo())
                 .build();
     }
 
