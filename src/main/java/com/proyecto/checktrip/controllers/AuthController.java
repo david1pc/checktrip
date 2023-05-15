@@ -29,7 +29,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO login) {
+    public ResponseEntity<Object> login(@RequestBody LoginDTO login) {
         try {
             if (this.clientService.verifyTemporalPasswd(login)){
                 return new ResponseEntity<>(login, HttpStatus.UPGRADE_REQUIRED);
@@ -53,14 +53,12 @@ public class AuthController {
 
     @PostMapping("/update-passwd")
     public ClientPasswdResponseDTO updatePasswdClient(@RequestBody ClientPasswdRequestDTO client) {
-        ClientPasswdResponseDTO clientPasswdResponseDTO = this.clientService.updateAccount(client);
-        return clientPasswdResponseDTO;
+        return this.clientService.updateAccount(client);
     }
 
     @PostMapping("/recover-account")
     public AccountRecoveryResponseDTO recoverAccount(@RequestBody AccountRecoveryRequestDTO accountRecoveryRequestDTO){
-        AccountRecoveryResponseDTO response = this.clientService.recoverAccount(accountRecoveryRequestDTO);
-        return response;
+        return this.clientService.recoverAccount(accountRecoveryRequestDTO);
     }
 
 
