@@ -13,26 +13,18 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Builder
-@Entity(name = "Client")
-public class Client {
+@Entity(name = "Itinerary")
+public class Itinerary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Integer codigo;
+    private Integer id;
 
-    @OneToOne
-    private Person persona;
+    @ManyToOne
+    private Viaje viaje;
 
     @ToString.Exclude
     @JsonIgnore
-    @OneToMany(mappedBy = "client")
-    private List<RoleClient> roles;
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "client")
-    private List<ClienteIdaVueltaViajes> clienteIdaVueltaViajes;
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "client")
-    private List<ClienteIdaViajes> clienteIdaViajes;
+    @OneToMany(mappedBy = "itinerary")
+    private List<Segment> segments;
 }
