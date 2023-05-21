@@ -1,6 +1,5 @@
 package com.proyecto.checktrip.repo;
 
-import com.proyecto.checktrip.config.RsaKeyProperties;
 import com.proyecto.checktrip.entities.Client;
 import com.proyecto.checktrip.entities.Person;
 import com.proyecto.checktrip.entities.Role;
