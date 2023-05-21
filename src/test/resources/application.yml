@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
+    url: jdbc:h2://mem:db;DB_CLOSE_DELAY=-1
+    password: sa
+  jpa:
+    show-sql: 'true'
+    hibernate:
+      ddl-auto: create-drop
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+            required: 'true'
+          auth: 'true'
+    host: smtp.gmail.com
+    username: checktripcomunica@gmail.com
+    password: bpfnrnljnotcylvx
+    port: '587'

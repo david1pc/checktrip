@@ -1,5 +1,6 @@
 package com.proyecto.checktrip.repo;
 
+import com.proyecto.checktrip.config.RsaKeyProperties;
 import com.proyecto.checktrip.entities.Client;
 import com.proyecto.checktrip.entities.Person;
 import com.proyecto.checktrip.entities.Role;
@@ -7,9 +8,9 @@ import com.proyecto.checktrip.entities.RoleClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@SpringBootTest
+@DataJpaTest
 class ClientRepoTest {
     @Autowired
     private PersonRepo personRepo;
