@@ -8,8 +8,4 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ChecktripBackApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
-
 }
