@@ -1,9 +1,6 @@
 package com.proyecto.checktrip.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -18,7 +15,12 @@ public class Aircraft {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Integer id;
+    private Integer codigo;
+
+    private String id;
 
     private String name;
+
+    @ManyToOne
+    private Dictionaries dictionaries;
 }

@@ -1,0 +1,28 @@
+rsa:
+  public-key: classpath:certs/public.pem
+  private-key: classpath:certs/private.pem
+spring:
+  h2:
+    console:
+      enabled: 'true'
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    url: jdbc:mysql://containers-us-west-122.railway.app:7088/railway?serverTimezone=UTC
+    password: ArkMb4tQcTAiAyHaQftW
+  jpa:
+    show-sql: 'true'
+    hibernate:
+      ddl-auto: create-drop
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+            required: 'true'
+          auth: 'true'
+    host: smtp.gmail.com
+    username: checktripcomunica@gmail.com
+    password: bpfnrnljnotcylvx
+    port: '587'

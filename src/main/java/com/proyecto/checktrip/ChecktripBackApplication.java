@@ -20,7 +20,7 @@ public class ChecktripBackApplication {
         SpringApplication.run(ChecktripBackApplication.class, args);
     }
 
-    @Profile({"dev","prod"})
+    @Profile({"dev","prod", "test"})
     @Bean
     CommandLineRunner run(RoleRepo roleRepo) {
         return args -> {
