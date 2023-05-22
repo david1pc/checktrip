@@ -22,11 +22,10 @@ public class Viaje {
     private Integer numberOfBookeableSeats;
     @OneToOne
     private Price price;
-    @ToString.Exclude
-    @OneToMany(mappedBy = "viaje")
-    List<Itinerary> itineraries;
 
-    @ToString.Exclude
-    @OneToMany(mappedBy = "viaje")
-    List<Dictionaries> dictionaries;
+    @OneToOne
+    private Itinerary itinerary;
+
+    @OneToOne
+    private Dictionaries dictionaries;
 }

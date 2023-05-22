@@ -1,6 +1,5 @@
 package com.proyecto.checktrip.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,9 +24,9 @@ public class Dictionaries {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "dictionaries")
-    private List<DictionaryCarriers> carriers;
+    private List<Carriers> carriers;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "dictionaries")
-    private List<DictionaryAircraft> aircrafts;
+    private List<Aircraft> aircrafts;
 }
