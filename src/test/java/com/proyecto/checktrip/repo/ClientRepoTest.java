@@ -4,10 +4,12 @@ import com.proyecto.checktrip.entities.Client;
 import com.proyecto.checktrip.entities.Person;
 import com.proyecto.checktrip.entities.Role;
 import com.proyecto.checktrip.entities.RoleClient;
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.List;
 
 @DataJpaTest
 class ClientRepoTest {
@@ -47,7 +49,9 @@ class ClientRepoTest {
 
         this.roleClientRepo.save(roleClient);
 
-        Assertions.assertEquals(client1.getPersona().getUsername(), client.getPersona().getUsername());
+        Client expected = this.clientRepo.findById(client1.getCodigo()).get();
+
+        Assertions.assertThat(expected).isEqualTo(client1);
     }
 
 
