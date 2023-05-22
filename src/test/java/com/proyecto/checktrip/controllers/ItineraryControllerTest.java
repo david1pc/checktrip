@@ -7,6 +7,7 @@ import com.proyecto.checktrip.dto.*;
 import com.proyecto.checktrip.repo.*;
 import com.proyecto.checktrip.services.ClientService;
 import com.proyecto.checktrip.services.ClienteViajeService;
+import com.proyecto.checktrip.services.ClienteViajeServiceImpl;
 import com.proyecto.checktrip.services.RoleServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class ItineraryControllerTest {
     @MockBean
-    private ClienteViajeService clienteViajeService;
+    private ClienteViajeServiceImpl clienteViajeService;
     @MockBean
     private ClientService clientService;
     @MockBean
@@ -167,15 +168,5 @@ class ItineraryControllerTest {
         MvcResult result = mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andReturn();
-    }
-
-    @Test
-    void index() throws Exception {
-        RequestBuilder request = MockMvcRequestBuilders
-                .get("/api/itinerary/obtener");
-        MvcResult result = mockMvc.perform(request)
-                .andExpect(status().isOk())
-                .andReturn();
-        Assertions.assertEquals("Hola", result.getResponse().getContentAsString());
     }
 }

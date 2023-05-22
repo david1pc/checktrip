@@ -6,7 +6,7 @@ import com.proyecto.checktrip.dto.ClienteViajeIdaVueltaRequestDTO;
 import com.proyecto.checktrip.dto.ClienteViajeIdaVueltaResponseDTO;
 import com.proyecto.checktrip.entities.Itinerary;
 import org.springframework.stereotype.Service;
-@Service
+
 public interface ClienteViajeService {
 
     public ClienteViajeIdaResponseDTO guardarItinerarioIda (ClienteViajeIdaRequestDTO clienteViajeIdaRequestDTO);

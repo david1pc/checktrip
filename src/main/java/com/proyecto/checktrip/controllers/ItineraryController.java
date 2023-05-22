@@ -1,11 +1,9 @@
 package com.proyecto.checktrip.controllers;
 
-import com.proyecto.checktrip.dto.ClientRequestDTO;
-import com.proyecto.checktrip.dto.ClientResponseDTO;
 import com.proyecto.checktrip.dto.ClienteViajeIdaRequestDTO;
 import com.proyecto.checktrip.dto.ClienteViajeIdaResponseDTO;
 import com.proyecto.checktrip.services.ClienteViajeService;
-import lombok.RequiredArgsConstructor;
+import com.proyecto.checktrip.services.ClienteViajeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,15 +15,10 @@ import org.springframework.web.bind.annotation.*;
         })
 public class ItineraryController {
         @Autowired
-        private ClienteViajeService clienteViajeService;
+        private ClienteViajeServiceImpl clienteViajeService;
 
         @PostMapping("/")
         public ClienteViajeIdaResponseDTO createItinerary(@RequestBody ClienteViajeIdaRequestDTO itinerary) {
                 return this.clienteViajeService.guardarItinerarioIda(itinerary);
-        }
-
-        @GetMapping("/obtener")
-        public String index() {
-                return "Hola";
         }
 }

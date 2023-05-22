@@ -1,9 +1,15 @@
+rsa:
+  public-key: classpath:certs/public.pem
+  private-key: classpath:certs/private.pem
 spring:
+  h2:
+    console:
+      enabled: 'true'
   datasource:
-    driver-class-name: org.h2.Driver
-    username: sa
-    url: jdbc:h2://mem:db;DB_CLOSE_DELAY=-1
-    password: sa
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    url: jdbc:mysql://containers-us-west-122.railway.app:7088/railway?serverTimezone=UTC
+    password: ArkMb4tQcTAiAyHaQftW
   jpa:
     show-sql: 'true'
     hibernate:

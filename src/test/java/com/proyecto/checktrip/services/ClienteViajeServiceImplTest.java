@@ -1,14 +1,24 @@
 package com.proyecto.checktrip.services;
 
+import com.proyecto.checktrip.controllers.AuthController;
 import com.proyecto.checktrip.dto.*;
 import com.proyecto.checktrip.entities.Role;
 import com.proyecto.checktrip.repo.*;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
-@DataJpaTest
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@SpringBootTest
+@ActiveProfiles("test")
 class ClienteViajeServiceImplTest {
     @Autowired
     private ClienteViajeServiceImpl clienteViajeService;
@@ -16,42 +26,49 @@ class ClienteViajeServiceImplTest {
     private ClientService clientService;
     @Autowired
     private RoleServiceImpl roleService;
-    @Autowired
-    private PersonRepo personRepo;
-    @Autowired
-    private ClientRepo clientRepo;
-    @Autowired
-    private ViajeRepo viajeRepo;
-    @Autowired
-    private ItineraryRepo itineraryRepo;
-    @Autowired
-    private SegmentRepo segmentRepo;
-    @Autowired
-    private SegmentAircraftRepo segmentAircraftRepo;
-    @Autowired
-    private OperatingRepo operatingRepo;
-    @Autowired
-    private ArrivalRepo arrivalRepo;
-    @Autowired
-    private PriceRepo priceRepo;
-    @Autowired
-    private DictionariesRepo dictionariesRepo;
-    @Autowired
-    private CarriersRepo carriersRepo;
-    @Autowired
-    private AircraftRepo aircraftRepo;
-    @Autowired
+    @MockBean
     private PasswordEncoder passwordEncoder;
-    @Autowired
+    @MockBean
+    private TokenService tokenService;
+    @MockBean
+    private AuthController authController;
+    @MockBean
+    private JwtEncoder jwtEncoder;
+    @MockBean
+    private PersonRepo personRepo;
+    @MockBean
+    private ClientRepo clientRepo;
+    @MockBean
+    private ViajeRepo viajeRepo;
+    @MockBean
+    private ItineraryRepo itineraryRepo;
+    @MockBean
+    private SegmentRepo segmentRepo;
+    @MockBean
+    private SegmentAircraftRepo segmentAircraftRepo;
+    @MockBean
+    private OperatingRepo operatingRepo;
+    @MockBean
+    private ArrivalRepo arrivalRepo;
+    @MockBean
+    private PriceRepo priceRepo;
+    @MockBean
+    private DictionariesRepo dictionariesRepo;
+    @MockBean
+    private CarriersRepo carriersRepo;
+    @MockBean
+    private AircraftRepo aircraftRepo;
+    @MockBean
     private RoleRepo roleRepo;
-    @Autowired
+    @MockBean
     private RoleClientRepo roleClientRepo;
+    @Autowired
+    private RoleRepo roleRepo2;
 
-    /*
     @Test
     public void deberiaCrearItinerario() {
         Role role = new Role("CLIENT");
-        roleService.createRole(role);
+        roleRepo2.save(role);
         PersonDTO person = PersonDTO.builder()
                 .username("david2")
                 .apellidos("david")
@@ -65,7 +82,6 @@ class ClienteViajeServiceImplTest {
                 .build();
 
         clientService.createClient(clientRequestDTO);
-        /*
         CarriersDTO carriersDTO = CarriersDTO.builder()
                 .id("AC")
                 .name("ACM")
@@ -149,6 +165,6 @@ class ClienteViajeServiceImplTest {
                 .build();
         ClienteViajeIdaResponseDTO clienteViajeIdaResponseDTO = this.clienteViajeService.guardarItinerarioIda(clienteViajeIdaRequestDTO);
         Assertions.assertThat(clienteViajeIdaRequestDTO.username()).isEqualTo(clienteViajeIdaResponseDTO.username());
-         */
-    //}
+    }
+
 }
