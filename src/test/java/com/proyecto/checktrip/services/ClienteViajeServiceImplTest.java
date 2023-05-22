@@ -7,81 +7,40 @@ import com.proyecto.checktrip.repo.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.token.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
+@Transactional
 @ActiveProfiles("test")
 class ClienteViajeServiceImplTest {
     @Autowired
-    private ClienteViajeServiceImpl clienteViajeService;
-    @Autowired
-    private ClientService clientService;
-    @Autowired
-    private RoleServiceImpl roleService;
-    @MockBean
-    private PasswordEncoder passwordEncoder;
-    @MockBean
-    private TokenService tokenService;
-    @MockBean
-    private AuthController authController;
+    private ClienteViajeService clienteViajeService;
     @MockBean
     private JwtEncoder jwtEncoder;
     @MockBean
-    private PersonRepo personRepo;
+    private JwtDecoder jwtDecoder;
     @MockBean
-    private ClientRepo clientRepo;
-    @MockBean
-    private ViajeRepo viajeRepo;
-    @MockBean
-    private ItineraryRepo itineraryRepo;
-    @MockBean
-    private SegmentRepo segmentRepo;
-    @MockBean
-    private SegmentAircraftRepo segmentAircraftRepo;
-    @MockBean
-    private OperatingRepo operatingRepo;
-    @MockBean
-    private ArrivalRepo arrivalRepo;
-    @MockBean
-    private PriceRepo priceRepo;
-    @MockBean
-    private DictionariesRepo dictionariesRepo;
-    @MockBean
-    private CarriersRepo carriersRepo;
-    @MockBean
-    private AircraftRepo aircraftRepo;
-    @MockBean
-    private RoleRepo roleRepo;
-    @MockBean
-    private RoleClientRepo roleClientRepo;
-    @Autowired
-    private RoleRepo roleRepo2;
+    private TokenService tokenService;
 
     @Test
     public void deberiaCrearItinerario() {
-        Role role = new Role("CLIENT");
-        roleRepo2.save(role);
-        PersonDTO person = PersonDTO.builder()
-                .username("david2")
-                .apellidos("david")
-                .nombres("rodriguez")
-                .password("12345")
-                .correo("david@email.com")
-                .build();
-
-        ClientRequestDTO clientRequestDTO = ClientRequestDTO.builder()
-                .person(person)
-                .build();
-
-        clientService.createClient(clientRequestDTO);
         CarriersDTO carriersDTO = CarriersDTO.builder()
                 .id("AC")
                 .name("ACM")
@@ -159,7 +118,7 @@ class ClienteViajeServiceImplTest {
                 .build();
 
         ClienteViajeIdaRequestDTO clienteViajeIdaRequestDTO = ClienteViajeIdaRequestDTO.builder()
-                .username("david2")
+                .username("davidpc")
                 .viaje(viajeDTO)
                 .fechaCreacion(LocalDateTime.now())
                 .build();

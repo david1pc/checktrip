@@ -7,11 +7,15 @@ import com.proyecto.checktrip.entities.RoleClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.token.TokenService;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
-
-@DataJpaTest
+@SpringBootTest
+@ActiveProfiles("test")
 class ClientRepoTest {
     @Autowired
     private PersonRepo personRepo;
@@ -21,6 +25,12 @@ class ClientRepoTest {
     private RoleClientRepo roleClientRepo;
     @Autowired
     private RoleRepo roleRepo;
+    @MockBean
+    private JwtEncoder jwtEncoder;
+    @MockBean
+    private JwtDecoder jwtDecoder;
+    @MockBean
+    private TokenService tokenService;
 
     @Test
     public void deberiaCrearCliente(){
@@ -53,6 +63,4 @@ class ClientRepoTest {
 
         Assertions.assertThat(expected).isEqualTo(client1);
     }
-
-
 }

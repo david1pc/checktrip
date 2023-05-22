@@ -4,28 +4,31 @@ import com.proyecto.checktrip.entities.Person;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.token.TokenService;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
-@DataJpaTest
+@SpringBootTest
+@ActiveProfiles("test")
 public class PersonRepoTest {
 
     @Autowired
     private PersonRepo personRepo;
 
+    @MockBean
+    private JwtEncoder jwtEncoder;
+    @MockBean
+    private JwtDecoder jwtDecoder;
+    @MockBean
+    private TokenService tokenService;
+
     @Test
-    public void deberiaCrearPersona(){
-        Person person = Person.builder()
-                .username("prueba2")
-                .estado(true)
-                .password("12345")
-                .correo("prueba2@gmail.com")
-                .nombres("prueba")
-                .apellidos("aa")
-                .build();
-        Person newPerson = personRepo.save(person);
-
-        Person expected = personRepo.findByUsername(person.getUsername()).get();
-
-        Assertions.assertThat(expected).isEqualTo(newPerson);
+    public void deberiaBuscarPersona(){
+        String username = "davidpc";
+        Person expected = personRepo.findByUsername(username).get();
+        Assertions.assertThat(username).isEqualTo(expected.getUsername());
     }
 }
