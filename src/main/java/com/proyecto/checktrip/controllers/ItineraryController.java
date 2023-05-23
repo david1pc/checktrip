@@ -14,7 +14,7 @@ import java.security.Principal;
 @RequestMapping("/api/itinerary")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:4200", "https://checktrip-software.web.app/"},
-        methods = {RequestMethod.POST})
+        methods = {RequestMethod.POST, RequestMethod.GET})
 public class ItineraryController {
         private final ClienteViajeServiceImpl clienteViajeService;
 
