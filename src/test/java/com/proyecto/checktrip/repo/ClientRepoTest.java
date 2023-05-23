@@ -33,7 +33,7 @@ class ClientRepoTest {
     private TokenService tokenService;
 
     @Test
-    public void deberiaCrearCliente(){
+    void deberiaCrearCliente(){
         Person person = Person.builder()
                 .username("prueba1")
                 .estado(true)

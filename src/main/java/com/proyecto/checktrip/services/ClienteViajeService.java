@@ -4,8 +4,6 @@ import com.proyecto.checktrip.dto.ClienteViajeIdaRequestDTO;
 import com.proyecto.checktrip.dto.ClienteViajeIdaResponseDTO;
 import com.proyecto.checktrip.dto.ClienteViajeIdaVueltaRequestDTO;
 import com.proyecto.checktrip.dto.ClienteViajeIdaVueltaResponseDTO;
-import com.proyecto.checktrip.entities.Itinerary;
-import org.springframework.stereotype.Service;
 
 public interface ClienteViajeService {
 

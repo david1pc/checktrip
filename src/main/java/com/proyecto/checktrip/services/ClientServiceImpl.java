@@ -3,7 +3,6 @@ package com.proyecto.checktrip.services;
 import com.proyecto.checktrip.dto.*;
 import com.proyecto.checktrip.entities.Client;
 import com.proyecto.checktrip.entities.Person;
-import com.proyecto.checktrip.entities.Role;
 import com.proyecto.checktrip.entities.RoleClient;
 import com.proyecto.checktrip.exceptions.ClientePasswordNoCoincide;
 import com.proyecto.checktrip.exceptions.PersonaNoExiste;
@@ -48,9 +47,7 @@ public class ClientServiceImpl implements ClientService{
                 .persona(newPerson)
                 .build();
         Client clientSave = this.clientRepo.save(client);
-        this.roleService.findById(1).ifPresent(role1 -> {
-            this.roleService.createRoleClient(new RoleClient(role1, clientSave));
-        });
+        this.roleService.findById(1).ifPresent(role1 -> this.roleService.createRoleClient(new RoleClient(role1, clientSave)));
         return ClientResponseDTO.builder()
                 .nombres(clientSave.getPersona().getNombres())
                 .apellidos(clientSave.getPersona().getApellidos())
