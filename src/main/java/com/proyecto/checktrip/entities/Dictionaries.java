@@ -22,11 +22,9 @@ public class Dictionaries {
     @ManyToOne
     private Viaje viaje;
 
-    @ToString.Exclude
     @OneToMany(mappedBy = "dictionaries")
     private List<Carriers> carriers;
 
-    @ToString.Exclude
     @OneToMany(mappedBy = "dictionaries")
     private List<Aircraft> aircrafts;
 }

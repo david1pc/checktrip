@@ -25,7 +25,6 @@ public class Itinerary {
     @ManyToOne
     private Viaje viaje;
 
-    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "itinerary")
     private List<Segment> segments;
