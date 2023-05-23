@@ -24,6 +24,7 @@ import java.security.Principal;
         })
 public class AuthController {
     private final ClientServiceImpl clientService;
+    private final ClienteViajeServiceImpl clienteViajeService;
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
 
@@ -67,6 +68,12 @@ public class AuthController {
     @GetMapping("/index")
     public String index(Principal principal){
         return "Hola " + principal.getName();
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_CLIENT')")
+    @PostMapping("/ida")
+    public String createItineraryIda(@RequestBody ClienteViajeIdaRequestDTO itinerary) {
+        return this.clienteViajeService.guardarItinerarioIda(itinerary);
     }
 
     public Authentication autenticarUsuario(String username, String password) {
