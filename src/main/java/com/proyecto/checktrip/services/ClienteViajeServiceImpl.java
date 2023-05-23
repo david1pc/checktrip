@@ -6,15 +6,15 @@ import com.proyecto.checktrip.exceptions.ClienteNoExiste;
 import com.proyecto.checktrip.exceptions.PersonaNoExiste;
 import com.proyecto.checktrip.repo.*;
 import lombok.AllArgsConstructor;
-import org.springframework.cglib.core.Local;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class ClienteViajeServiceImpl implements ClienteViajeService{
     private final PersonRepo personRepo;
@@ -43,6 +43,7 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
 
     @Override
     public ItineraryClientDTO guardarItinerario(String username, ViajeDTO viajeDTO) {
+        log.info("Nuevo iti: " + viajeDTO.toString());
         Person person = this.buscarPersona(username);
         Client client = this.buscarCliente(person.getCodigo());
 
@@ -84,6 +85,7 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
             Arrival arrival = this.saveArrival(segmento.arrival());
             Arrival departure = this.saveArrival(segmento.departure());
             Operating operating = this.saveOperating(segmento.operating());
+            log.info("Segment aircraft" + segmento.segmentAircraft().code());
             SegmentAircraft segmentAircraft = this.saveAircraft(segmento.segmentAircraft());
 
             Segment segment = Segment.builder()
