@@ -4,19 +4,17 @@ import com.proyecto.checktrip.dto.ClienteViajeIdaRequestDTO;
 import com.proyecto.checktrip.dto.ClienteViajeIdaVueltaRequestDTO;
 import com.proyecto.checktrip.dto.ItinerariesClientDTO;
 import com.proyecto.checktrip.services.ClienteViajeServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/itinerary")
+@RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:4200", "https://checktrip-software.web.app/"},
-        methods = {RequestMethod.POST,
-                RequestMethod.GET
-        })
+        methods = {RequestMethod.POST})
 public class ItineraryController {
-        @Autowired
-        private ClienteViajeServiceImpl clienteViajeService;
+        private final ClienteViajeServiceImpl clienteViajeService;
 
         @PreAuthorize("hasAuthority('SCOPE_CLIENT')")
         @PostMapping("/ida")
