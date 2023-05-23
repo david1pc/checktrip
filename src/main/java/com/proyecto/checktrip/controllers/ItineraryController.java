@@ -30,8 +30,8 @@ public class ItineraryController {
 
         @PreAuthorize("hasAuthority('SCOPE_CLIENT')")
         @PostMapping("/")
-        public ItinerariesClientDTO findAllItineraries(@RequestBody String username){
-                return this.clienteViajeService.obtenerViajes(username);
+        public ItinerariesClientDTO findAllItineraries(@RequestBody ItinerariesRequestDTO itinerariesRequestDTO){
+                return this.clienteViajeService.obtenerViajes(itinerariesRequestDTO.username());
         }
 
         @PreAuthorize("hasAuthority('SCOPE_CLIENT')")
