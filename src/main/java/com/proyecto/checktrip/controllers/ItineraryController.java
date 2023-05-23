@@ -1,8 +1,6 @@
 package com.proyecto.checktrip.controllers;
 
-import com.proyecto.checktrip.dto.ClienteViajeIdaRequestDTO;
-import com.proyecto.checktrip.dto.ClienteViajeIdaVueltaRequestDTO;
-import com.proyecto.checktrip.dto.ItinerariesClientDTO;
+import com.proyecto.checktrip.dto.*;
 import com.proyecto.checktrip.services.ClienteViajeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,13 +18,13 @@ public class ItineraryController {
 
         @PreAuthorize("hasAuthority('SCOPE_CLIENT')")
         @PostMapping("/ida")
-        public String createItineraryIda(@RequestBody ClienteViajeIdaRequestDTO itinerary) {
+        public ClienteViajeIdaResponseDTO createItineraryIda(@RequestBody ClienteViajeIdaRequestDTO itinerary) {
                 return this.clienteViajeService.guardarItinerarioIda(itinerary);
         }
 
         @PreAuthorize("hasAuthority('SCOPE_CLIENT')")
         @PostMapping("/ida-vuelta")
-        public String createItineraryIdaVuelta(@RequestBody ClienteViajeIdaVueltaRequestDTO itinerary) {
+        public ClienteViajeIdaVueltaResponseDTO createItineraryIdaVuelta(@RequestBody ClienteViajeIdaVueltaRequestDTO itinerary) {
                 return this.clienteViajeService.guardarItinerarioIdaVuelta(itinerary);
         }
 

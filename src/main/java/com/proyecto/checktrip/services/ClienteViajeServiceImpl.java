@@ -144,7 +144,7 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
     }
 
     @Override
-    public String guardarItinerarioIda(ClienteViajeIdaRequestDTO clienteViajeIdaRequestDTO) {
+    public ClienteViajeIdaResponseDTO guardarItinerarioIda(ClienteViajeIdaRequestDTO clienteViajeIdaRequestDTO) {
         ItineraryClientDTO itineraryClientDTO = this.guardarItinerario(clienteViajeIdaRequestDTO.username(), clienteViajeIdaRequestDTO.viaje());
         ClienteIdaViajes clienteIdaViajes = ClienteIdaViajes.builder()
                 .viaje(itineraryClientDTO.viaje())
@@ -152,11 +152,13 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
                 .fechaCreacion(LocalDateTime.now())
                 .build();
         this.clienteIdaViajesRepo.save(clienteIdaViajes);
-        return "Se ha creado su itinerario de ida correctamente";
+        return ClienteViajeIdaResponseDTO.builder()
+                .descripcion("Se ha creado su itinerario de ida correctamente")
+                .build();
     }
 
     @Override
-    public String guardarItinerarioIdaVuelta(ClienteViajeIdaVueltaRequestDTO clienteViajeIdaVueltaRequestDTO) {
+    public ClienteViajeIdaVueltaResponseDTO guardarItinerarioIdaVuelta(ClienteViajeIdaVueltaRequestDTO clienteViajeIdaVueltaRequestDTO) {
         ItineraryClientDTO itineraryClientIdaDTO = this.guardarItinerario(clienteViajeIdaVueltaRequestDTO.username(), clienteViajeIdaVueltaRequestDTO.viajeIda());
         ItineraryClientDTO itineraryClientVueltaDTO = this.guardarItinerario(clienteViajeIdaVueltaRequestDTO.username(), clienteViajeIdaVueltaRequestDTO.viajeVuelta());
         ClienteIdaVueltaViajes clienteIdaVueltaViajes = ClienteIdaVueltaViajes.builder()
@@ -166,7 +168,9 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
                 .fechaCreacion(LocalDateTime.now())
                 .build();
         this.clienteIdaVueltaViajesRepo.save(clienteIdaVueltaViajes);
-        return "Se ha creado su itinerario de ida y vuelta correctamente";
+        return ClienteViajeIdaVueltaResponseDTO.builder()
+                .descripcion("Se ha creado su itinerario de ida y vuelta correctamente")
+                .build();
     }
 
     @Override

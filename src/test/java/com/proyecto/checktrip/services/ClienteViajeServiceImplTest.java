@@ -50,8 +50,8 @@ class ClienteViajeServiceImplTest {
                 .viaje(viajeDTO)
                 .fechaCreacion(LocalDateTime.now())
                 .build();
-        String respuesta = this.clienteViajeService.guardarItinerarioIda(clienteViajeIdaRequestDTO);
-        Assertions.assertThat(expected).isEqualTo(respuesta);
+        ClienteViajeIdaResponseDTO respuesta = this.clienteViajeService.guardarItinerarioIda(clienteViajeIdaRequestDTO);
+        Assertions.assertThat(expected).isEqualTo(respuesta.descripcion());
     }
 
     @Test
@@ -65,8 +65,8 @@ class ClienteViajeServiceImplTest {
                 .viajeVuelta(viajeVueltaDTO)
                 .fechaCreacion(LocalDateTime.now())
                 .build();
-        String respuesta = this.clienteViajeService.guardarItinerarioIdaVuelta(clienteViajeIdaVueltaRequestDTO);
-        Assertions.assertThat(expected).isEqualTo(respuesta);
+        ClienteViajeIdaVueltaResponseDTO respuesta = this.clienteViajeService.guardarItinerarioIdaVuelta(clienteViajeIdaVueltaRequestDTO);
+        Assertions.assertThat(expected).isEqualTo(respuesta.descripcion());
     }
 
     @Test
