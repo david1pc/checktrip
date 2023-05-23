@@ -6,8 +6,10 @@ import com.proyecto.checktrip.exceptions.ClienteNoExiste;
 import com.proyecto.checktrip.exceptions.PersonaNoExiste;
 import com.proyecto.checktrip.repo.*;
 import lombok.AllArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ClienteViajeServiceImpl implements ClienteViajeService{
     private final PersonRepo personRepo;
+    private final ClienteIdaViajesRepo clienteIdaViajesRepo;
+    private final ClienteIdaVueltaViajesRepo clienteIdaVueltaViajesRepo;
     private final ClientRepo clientRepo;
     private final ViajeRepo viajeRepo;
 
@@ -38,14 +42,14 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
     private final AircraftRepo aircraftRepo;
 
     @Override
-    public ClienteViajeIdaResponseDTO guardarItinerarioIda(ClienteViajeIdaRequestDTO clienteViajeIdaRequestDTO) {
-        Person person = this.buscarPersona(clienteViajeIdaRequestDTO.username());
+    public ItineraryClientDTO guardarItinerario(String username, ViajeDTO viajeDTO) {
+        Person person = this.buscarPersona(username);
         Client client = this.buscarCliente(person.getCodigo());
 
         List<Aircraft> listAircrafts = new ArrayList<>();
         List<Carriers> listCarriers = new ArrayList<>();
 
-        clienteViajeIdaRequestDTO.viaje().dictionaries().aircraft().forEach((aircraftDTO -> {
+        viajeDTO.dictionaries().aircraft().forEach((aircraftDTO -> {
             Aircraft aircraft = this.aircraftRepo.findAircraftById(aircraftDTO.id()).orElse(null);
             if(aircraft == null){
                 aircraft = this.aircraftRepo.save(Aircraft.builder()
@@ -56,7 +60,7 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
             listAircrafts.add(aircraft);
         }));
 
-        clienteViajeIdaRequestDTO.viaje().dictionaries().carriers().forEach((carriersDTO -> {
+        viajeDTO.dictionaries().carriers().forEach((carriersDTO -> {
             Carriers carriers = this.carriersRepo.findCarriersById(carriersDTO.id()).orElse(null);
             if(carriers == null){
                 carriers = this.carriersRepo.save(Carriers.builder()
@@ -76,7 +80,7 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
 
         List<Segment> segments = new ArrayList<>();
 
-        clienteViajeIdaRequestDTO.viaje().itineraryDTO().segments().forEach(segmento -> {
+        viajeDTO.itineraryDTO().segments().forEach(segmento -> {
             Arrival arrival = this.saveArrival(segmento.arrival());
             Arrival departure = this.saveArrival(segmento.departure());
             Operating operating = this.saveOperating(segmento.operating());
@@ -107,17 +111,17 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
         Itinerary itinerary1 = itineraryRepo.save(itinerary);
 
         Price price = Price.builder()
-                .base(clienteViajeIdaRequestDTO.viaje().price().base())
-                .currency(clienteViajeIdaRequestDTO.viaje().price().currency())
-                .grandTotal(clienteViajeIdaRequestDTO.viaje().price().grandTotal())
-                .total(clienteViajeIdaRequestDTO.viaje().price().total())
+                .base(viajeDTO.price().base())
+                .currency(viajeDTO.price().currency())
+                .grandTotal(viajeDTO.price().grandTotal())
+                .total(viajeDTO.price().total())
                 .build();
         Price price1 = priceRepo.save(price);
 
 
         Viaje viaje = Viaje.builder()
                 .itinerary(itinerary1)
-                .numberOfBookeableSeats(clienteViajeIdaRequestDTO.viaje().numberOfBookableSeats())
+                .numberOfBookeableSeats(viajeDTO.numberOfBookableSeats())
                 .price(price1)
                 .build();
 
@@ -132,16 +136,47 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
         itinerary1.setViaje(viaje1);
         this.itineraryRepo.save(itinerary1);
 
-        ClienteIdaViajes clienteIdaViajes = ClienteIdaViajes.builder()
+        return ItineraryClientDTO.builder()
+                .viaje(viaje1)
                 .client(client)
-                .viaje(viaje)
                 .fechaCreacion(LocalDateTime.now())
                 .build();
+    }
 
-        return ClienteViajeIdaResponseDTO.builder()
-                .viaje(clienteViajeIdaRequestDTO.viaje())
-                .fechaCreacion(clienteIdaViajes.getFechaCreacion())
-                .username(client.getPersona().getUsername())
+    @Override
+    public String guardarItinerarioIda(ClienteViajeIdaRequestDTO clienteViajeIdaRequestDTO) {
+        ItineraryClientDTO itineraryClientDTO = this.guardarItinerario(clienteViajeIdaRequestDTO.username(), clienteViajeIdaRequestDTO.viaje());
+        ClienteIdaViajes clienteIdaViajes = ClienteIdaViajes.builder()
+                .viaje(itineraryClientDTO.viaje())
+                .client(itineraryClientDTO.client())
+                .fechaCreacion(LocalDateTime.now())
+                .build();
+        this.clienteIdaViajesRepo.save(clienteIdaViajes);
+        return "Se ha creado su itinerario de ida correctamente";
+    }
+
+    @Override
+    public String guardarItinerarioIdaVuelta(ClienteViajeIdaVueltaRequestDTO clienteViajeIdaVueltaRequestDTO) {
+        ItineraryClientDTO itineraryClientIdaDTO = this.guardarItinerario(clienteViajeIdaVueltaRequestDTO.username(), clienteViajeIdaVueltaRequestDTO.viajeIda());
+        ItineraryClientDTO itineraryClientVueltaDTO = this.guardarItinerario(clienteViajeIdaVueltaRequestDTO.username(), clienteViajeIdaVueltaRequestDTO.viajeVuelta());
+        ClienteIdaVueltaViajes clienteIdaVueltaViajes = ClienteIdaVueltaViajes.builder()
+                .viajeIda(itineraryClientIdaDTO.viaje())
+                .client(itineraryClientIdaDTO.client())
+                .viajeVuelta(itineraryClientVueltaDTO.viaje())
+                .fechaCreacion(LocalDateTime.now())
+                .build();
+        this.clienteIdaVueltaViajesRepo.save(clienteIdaVueltaViajes);
+        return "Se ha creado su itinerario de ida y vuelta correctamente";
+    }
+
+    @Override
+    public ItinerariesClientDTO obtenerViajes(String username) {
+        Person person = this.buscarPersona(username);
+        Client client = this.buscarCliente(person.getCodigo());
+
+        return ItinerariesClientDTO.builder()
+                .viajesIda(client.getClienteIdaViajes())
+                .viajesVuelta(client.getClienteIdaVueltaViajes())
                 .build();
     }
 
@@ -180,20 +215,5 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
         return this.personRepo.findByUsername(username).orElseThrow(() -> {
             throw new PersonaNoExiste("La persona no existe");
         });
-    }
-
-    @Override
-    public ClienteViajeIdaVueltaResponseDTO guardarItinerarioIdaVuelta(ClienteViajeIdaVueltaRequestDTO clienteViajeIdaVueltaRequestDTO) {
-        return null;
-    }
-
-    @Override
-    public String eliminarItinerarioIda(String username, Integer clienteIdaViajeCodigo) {
-        return null;
-    }
-
-    @Override
-    public String eliminarItinerarioIdaVuelta(String username, Integer clienteIdaVueltaViajeCodigo) {
-        return null;
     }
 }

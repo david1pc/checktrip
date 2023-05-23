@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.proyecto.checktrip.dto.*;
+import com.proyecto.checktrip.entities.Viaje;
 import com.proyecto.checktrip.repo.*;
 import com.proyecto.checktrip.services.ClientService;
 import com.proyecto.checktrip.services.ClienteViajeService;
@@ -76,7 +77,71 @@ class ItineraryControllerTest {
 
 
     @Test
-    void createItinerary() throws Exception {
+    void createItineraryIda() throws Exception {
+        ViajeDTO viajeDTO = this.retornarViaje();
+
+        ClienteViajeIdaRequestDTO clienteViajeIdaRequestDTO = ClienteViajeIdaRequestDTO.builder()
+                .username("david2")
+                .viaje(viajeDTO)
+                .fechaCreacion(LocalDateTime.now())
+                .build();
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .post("/api/itinerary/ida")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(clienteViajeIdaRequestDTO))
+                .contentType(MediaType.APPLICATION_JSON);
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    void createItineraryIdaVuelta() throws Exception {
+        ViajeDTO viajeIdaDTO = this.retornarViaje();
+        ViajeDTO viajeVueltaDTO = this.retornarViaje();
+        ClienteViajeIdaVueltaRequestDTO clienteViajeIdaVueltaRequestDTO = ClienteViajeIdaVueltaRequestDTO.builder()
+                .username("david2")
+                .viajeIda(viajeIdaDTO)
+                .viajeVuelta(viajeVueltaDTO)
+                .fechaCreacion(LocalDateTime.now())
+                .build();
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .post("/api/itinerary/ida-vuelta")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(clienteViajeIdaVueltaRequestDTO))
+                .contentType(MediaType.APPLICATION_JSON);
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    void findAllItineraries() throws Exception {
+        String username = "davidpc";
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .post("/api/itinerary/")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(username))
+                .contentType(MediaType.APPLICATION_JSON);
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    private ViajeDTO retornarViaje(){
         CarriersDTO carriersDTO = CarriersDTO.builder()
                 .id("AC")
                 .name("ACM")
@@ -146,30 +211,11 @@ class ItineraryControllerTest {
                 .segments(segmentDTOS)
                 .build();
 
-        ViajeDTO viajeDTO = ViajeDTO.builder()
+        return ViajeDTO.builder()
                 .price(priceDTO)
                 .itineraryDTO(itineraryDTO)
                 .numberOfBookableSeats(5)
                 .dictionaries(dictionaries)
                 .build();
-
-        ClienteViajeIdaRequestDTO clienteViajeIdaRequestDTO = ClienteViajeIdaRequestDTO.builder()
-                .username("david2")
-                .viaje(viajeDTO)
-                .fechaCreacion(LocalDateTime.now())
-                .build();
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        RequestBuilder request = MockMvcRequestBuilders
-                .post("/api/itinerary/")
-                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(clienteViajeIdaRequestDTO))
-                .contentType(MediaType.APPLICATION_JSON);
-        MvcResult result = mockMvc.perform(request)
-                .andExpect(status().isOk())
-                .andReturn();
     }
 }

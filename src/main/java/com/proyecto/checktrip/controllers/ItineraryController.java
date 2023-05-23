@@ -2,6 +2,8 @@ package com.proyecto.checktrip.controllers;
 
 import com.proyecto.checktrip.dto.ClienteViajeIdaRequestDTO;
 import com.proyecto.checktrip.dto.ClienteViajeIdaResponseDTO;
+import com.proyecto.checktrip.dto.ClienteViajeIdaVueltaRequestDTO;
+import com.proyecto.checktrip.dto.ItinerariesClientDTO;
 import com.proyecto.checktrip.services.ClienteViajeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +18,18 @@ public class ItineraryController {
         @Autowired
         private ClienteViajeServiceImpl clienteViajeService;
 
-        @PostMapping("/")
-        public ClienteViajeIdaResponseDTO createItinerary(@RequestBody ClienteViajeIdaRequestDTO itinerary) {
+        @PostMapping("/ida")
+        public String createItineraryIda(@RequestBody ClienteViajeIdaRequestDTO itinerary) {
                 return this.clienteViajeService.guardarItinerarioIda(itinerary);
+        }
+
+        @PostMapping("/ida-vuelta")
+        public String createItineraryIdaVuelta(@RequestBody ClienteViajeIdaVueltaRequestDTO itinerary) {
+                return this.clienteViajeService.guardarItinerarioIdaVuelta(itinerary);
+        }
+
+        @PostMapping("/")
+        public ItinerariesClientDTO findAllItineraries(@RequestBody String username){
+                return this.clienteViajeService.obtenerViajes(username);
         }
 }
