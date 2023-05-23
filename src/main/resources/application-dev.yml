@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     url: jdbc:mysql://localhost:3306/checktrip?serverTimezone=UTC
-    password: 1993
+    password: admin
   jpa:
     show-sql: 'true'
     hibernate:
