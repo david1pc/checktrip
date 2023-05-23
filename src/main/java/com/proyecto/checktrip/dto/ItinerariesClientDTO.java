@@ -7,6 +7,6 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record ItinerariesClientDTO(List<ClienteIdaViajes> viajesIda,
-                                   List<ClienteIdaVueltaViajes> viajesVuelta) {
+public record ItinerariesClientDTO(List<ClienteViajeIdaRequestDTO> viajesIda,
+                                   List<ClienteViajeIdaVueltaRequestDTO> viajesVuelta) {
 }

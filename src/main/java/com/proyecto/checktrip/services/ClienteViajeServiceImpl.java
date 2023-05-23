@@ -17,6 +17,9 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class ClienteViajeServiceImpl implements ClienteViajeService{
+    private final SegmentMapperDTO segmentMapperDTO;
+    private final CarriersMapperDTO carriersMapperDTO;
+    private final AircraftMapperDTO aircraftMapperDTO;
     private final PersonRepo personRepo;
     private final ClienteIdaViajesRepo clienteIdaViajesRepo;
     private final ClienteIdaVueltaViajesRepo clienteIdaVueltaViajesRepo;
@@ -178,9 +181,93 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
         Person person = this.buscarPersona(username);
         Client client = this.buscarCliente(person.getCodigo());
 
+        List<ClienteIdaViajes> viajesIda = client.getClienteIdaViajes();
+        List<ClienteIdaVueltaViajes> viajesIdaVuelta = client.getClienteIdaVueltaViajes();
+
+        List<ClienteViajeIdaRequestDTO> viajesIdaDto = new ArrayList<>();
+        List<ClienteViajeIdaVueltaRequestDTO> viajesIdaVueltaDto = new ArrayList<>();
+
+        viajesIda.forEach(clienteViajeIda -> {
+            List<SegmentDTO> segmentsDTOs = clienteViajeIda.getViaje().getItinerary().getSegments().stream().map(segmentMapperDTO).toList();
+            ItineraryDTO itineraryDTO = ItineraryDTO.builder()
+                    .duration(clienteViajeIda.getViaje().getItinerary().getDuration())
+                    .segments(segmentsDTOs)
+                    .build();
+            ViajeDTO viajeDTO = ViajeDTO.builder()
+                    .price(PriceDTO.builder()
+                            .grandTotal(clienteViajeIda.getViaje().getPrice().getGrandTotal())
+                            .currency(clienteViajeIda.getViaje().getPrice().getCurrency())
+                            .total(clienteViajeIda.getViaje().getPrice().getTotal())
+                            .base(clienteViajeIda.getViaje().getPrice().getBase())
+                            .build())
+                    .dictionaries(DictionariesDTO.builder()
+                            .aircraft(clienteViajeIda.getViaje().getDictionaries().getAircrafts().stream().map(aircraftMapperDTO).toList())
+                            .carriers(clienteViajeIda.getViaje().getDictionaries().getCarriers().stream().map(carriersMapperDTO).toList())
+                            .build())
+                    .itineraryDTO(itineraryDTO)
+                    .numberOfBookableSeats(clienteViajeIda.getViaje().getNumberOfBookeableSeats())
+                    .build();
+            viajesIdaDto.add(ClienteViajeIdaRequestDTO.builder()
+                    .viaje(viajeDTO)
+                    .fechaCreacion(clienteViajeIda.getFechaCreacion())
+                    .username(clienteViajeIda.getClient().getPersona().getUsername())
+                    .build());
+        });
+
+        viajesIdaVuelta.forEach(clienteViajeIdaVuelta -> {
+            List<SegmentDTO> segmentsIdaDTOs = clienteViajeIdaVuelta.getViajeIda().getItinerary().getSegments().stream().map(segmentMapperDTO).toList();
+            List<SegmentDTO> segmentsVueltaDTOs = clienteViajeIdaVuelta.getViajeVuelta().getItinerary().getSegments().stream().map(segmentMapperDTO).toList();
+            ItineraryDTO itineraryIdaDTO = ItineraryDTO.builder()
+                    .duration(clienteViajeIdaVuelta.getViajeIda().getItinerary().getDuration())
+                    .segments(segmentsIdaDTOs)
+                    .build();
+
+            ItineraryDTO itineraryVueltaDTO = ItineraryDTO.builder()
+                    .duration(clienteViajeIdaVuelta.getViajeVuelta().getItinerary().getDuration())
+                    .segments(segmentsVueltaDTOs)
+                    .build();
+
+            ViajeDTO viajeIdaDTO = ViajeDTO.builder()
+                    .price(PriceDTO.builder()
+                            .grandTotal(clienteViajeIdaVuelta.getViajeIda().getPrice().getGrandTotal())
+                            .currency(clienteViajeIdaVuelta.getViajeIda().getPrice().getCurrency())
+                            .total(clienteViajeIdaVuelta.getViajeIda().getPrice().getTotal())
+                            .base(clienteViajeIdaVuelta.getViajeIda().getPrice().getBase())
+                            .build())
+                    .dictionaries(DictionariesDTO.builder()
+                            .aircraft(clienteViajeIdaVuelta.getViajeIda().getDictionaries().getAircrafts().stream().map(aircraftMapperDTO).toList())
+                            .carriers(clienteViajeIdaVuelta.getViajeIda().getDictionaries().getCarriers().stream().map(carriersMapperDTO).toList())
+                            .build())
+                    .itineraryDTO(itineraryIdaDTO)
+                    .numberOfBookableSeats(clienteViajeIdaVuelta.getViajeIda().getNumberOfBookeableSeats())
+                    .build();
+
+            ViajeDTO viajeVueltaDTO = ViajeDTO.builder()
+                    .price(PriceDTO.builder()
+                            .grandTotal(clienteViajeIdaVuelta.getViajeVuelta().getPrice().getGrandTotal())
+                            .currency(clienteViajeIdaVuelta.getViajeVuelta().getPrice().getCurrency())
+                            .total(clienteViajeIdaVuelta.getViajeVuelta().getPrice().getTotal())
+                            .base(clienteViajeIdaVuelta.getViajeVuelta().getPrice().getBase())
+                            .build())
+                    .dictionaries(DictionariesDTO.builder()
+                            .aircraft(clienteViajeIdaVuelta.getViajeVuelta().getDictionaries().getAircrafts().stream().map(aircraftMapperDTO).toList())
+                            .carriers(clienteViajeIdaVuelta.getViajeVuelta().getDictionaries().getCarriers().stream().map(carriersMapperDTO).toList())
+                            .build())
+                    .itineraryDTO(itineraryVueltaDTO)
+                    .numberOfBookableSeats(clienteViajeIdaVuelta.getViajeVuelta().getNumberOfBookeableSeats())
+                    .build();
+
+            viajesIdaVueltaDto.add(ClienteViajeIdaVueltaRequestDTO.builder()
+                    .viajeIda(viajeIdaDTO)
+                    .viajeVuelta(viajeVueltaDTO)
+                    .fechaCreacion(clienteViajeIdaVuelta.getFechaCreacion())
+                    .username(clienteViajeIdaVuelta.getClient().getPersona().getUsername())
+                    .build());
+        });
+
         return ItinerariesClientDTO.builder()
-                .viajesIda(client.getClienteIdaViajes())
-                .viajesVuelta(client.getClienteIdaVueltaViajes())
+                .viajesIda(viajesIdaDto)
+                .viajesVuelta(viajesIdaVueltaDto)
                 .build();
     }
 
