@@ -1,5 +1,6 @@
 package com.proyecto.checktrip.services;
 
+import com.proyecto.checktrip.exceptions.JavaMailError;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,9 +24,9 @@ public class EmailService {
             javaMailSender.send(mensaje);
             return true;
         }catch(Exception e){
-            e.printStackTrace();
+            throw new JavaMailError("Ha ocurrido un error durante el envio del correo.");
+        }finally {
+            return false;
         }
-
-        return false;
     }
 }
