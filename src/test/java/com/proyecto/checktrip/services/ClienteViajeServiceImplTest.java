@@ -134,7 +134,7 @@ class ClienteViajeServiceImplTest {
                 .numberOfStops(1)
                 .duration("11H")
                 .carrierCode("1D")
-                .segmentAircraft(segmentAircraftDTO)
+                .aircraft(segmentAircraftDTO)
                 .operating(operatingDTO)
                 .build();
 

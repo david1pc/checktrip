@@ -43,7 +43,6 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
 
     @Override
     public ItineraryClientDTO guardarItinerario(String username, ViajeDTO viajeDTO) {
-        log.info("Nuevo iti: " + viajeDTO.toString());
         Person person = this.buscarPersona(username);
         Client client = this.buscarCliente(person.getCodigo());
 
@@ -85,8 +84,7 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
             Arrival arrival = this.saveArrival(segmento.arrival());
             Arrival departure = this.saveArrival(segmento.departure());
             Operating operating = this.saveOperating(segmento.operating());
-            log.info("Segment aircraft" + segmento.segmentAircraft().code());
-            SegmentAircraft segmentAircraft = this.saveAircraft(segmento.segmentAircraft());
+            SegmentAircraft segmentAircraft = this.saveAircraft(segmento.aircraft());
 
             Segment segment = Segment.builder()
                     .blackListedInEU(segmento.blacklistedInEU())
@@ -105,8 +103,8 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
             Segment segment1 = this.segmentRepo.save(segment);
             segments.add(segment1);
         });
-
         Itinerary itinerary = Itinerary.builder()
+                .duration(viajeDTO.itineraryDTO().duration())
                 .segments(segments)
                 .build();
 

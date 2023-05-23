@@ -20,6 +20,8 @@ public class Itinerary {
     @EqualsAndHashCode.Include
     private Integer id;
 
+    private String duration;
+
     @ManyToOne
     private Viaje viaje;
 
