@@ -140,6 +140,7 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
         Viaje viaje = Viaje.builder()
                 .itinerary(itinerary1)
                 .numberOfBookeableSeats(viajeDTO.numberOfBookableSeats())
+                .travelClass(viajeDTO.travelClass())
                 .price(price1)
                 .build();
 
@@ -220,6 +221,7 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
                             .carriers(clienteViajeIda.getViaje().getDictionaries().getCarriers().stream().map(carriersMapperDTO).toList())
                             .build())
                     .itineraryDTO(itineraryDTO)
+                    .travelClass(clienteViajeIda.getViaje().getTravelClass())
                     .numberOfBookableSeats(clienteViajeIda.getViaje().getNumberOfBookeableSeats())
                     .build();
             viajesIdaDto.add(ClienteViajeIdaRequestDTO.builder()
@@ -254,6 +256,7 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
                             .carriers(clienteViajeIdaVuelta.getViajeIda().getDictionaries().getCarriers().stream().map(carriersMapperDTO).toList())
                             .build())
                     .itineraryDTO(itineraryIdaDTO)
+                    .travelClass(clienteViajeIdaVuelta.getViajeIda().getTravelClass())
                     .numberOfBookableSeats(clienteViajeIdaVuelta.getViajeIda().getNumberOfBookeableSeats())
                     .build();
 
@@ -270,6 +273,7 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
                             .build())
                     .itineraryDTO(itineraryVueltaDTO)
                     .numberOfBookableSeats(clienteViajeIdaVuelta.getViajeVuelta().getNumberOfBookeableSeats())
+                    .travelClass(clienteViajeIdaVuelta.getViajeVuelta().getTravelClass())
                     .build();
 
             viajesIdaVueltaDto.add(ClienteViajeIdaVueltaRequestDTO.builder()

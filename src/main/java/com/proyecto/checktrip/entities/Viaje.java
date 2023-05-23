@@ -17,6 +17,7 @@ public class Viaje {
     @EqualsAndHashCode.Include
     private Integer codigo;
     private Integer numberOfBookeableSeats;
+    private String travelClass;
     @OneToOne
     private Price price;
 
