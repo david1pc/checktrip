@@ -13,8 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class PersonRepoTest {
-
+class PersonRepoTest {
     @Autowired
     private PersonRepo personRepo;
 
@@ -26,7 +25,7 @@ public class PersonRepoTest {
     private TokenService tokenService;
 
     @Test
-    public void deberiaBuscarPersona(){
+    void deberiaBuscarPersona(){
         String username = "davidpc";
         Person expected = personRepo.findByUsername(username).get();
         Assertions.assertThat(username).isEqualTo(expected.getUsername());

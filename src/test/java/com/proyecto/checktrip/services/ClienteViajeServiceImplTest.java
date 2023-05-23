@@ -40,7 +40,7 @@ class ClienteViajeServiceImplTest {
     private TokenService tokenService;
 
     @Test
-    public void deberiaCrearItinerario() {
+    void deberiaCrearItinerario() {
         CarriersDTO carriersDTO = CarriersDTO.builder()
                 .id("AC")
                 .name("ACM")

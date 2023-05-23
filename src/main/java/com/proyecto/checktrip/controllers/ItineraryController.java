@@ -2,7 +2,6 @@ package com.proyecto.checktrip.controllers;
 
 import com.proyecto.checktrip.dto.ClienteViajeIdaRequestDTO;
 import com.proyecto.checktrip.dto.ClienteViajeIdaResponseDTO;
-import com.proyecto.checktrip.services.ClienteViajeService;
 import com.proyecto.checktrip.services.ClienteViajeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
