@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/itinerary")
 @RequiredArgsConstructor
@@ -32,5 +34,11 @@ public class ItineraryController {
         @PostMapping("/")
         public ItinerariesClientDTO findAllItineraries(@RequestBody String username){
                 return this.clienteViajeService.obtenerViajes(username);
+        }
+
+        @PreAuthorize("hasAuthority('SCOPE_CLIENT')")
+        @GetMapping("/index")
+        public String index(Principal principal){
+                return "Hola " + principal.getName();
         }
 }
