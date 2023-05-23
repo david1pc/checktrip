@@ -35,7 +35,7 @@ class ClientServiceImplTest {
 
     private ClientRequestDTO retornarCliente(){
         PersonDTO personDTO = PersonDTO.builder()
-                .username("prueba521")
+                .username("prueba5211")
                 .password("12345")
                 .correo("prueba10@gmail.com")
                 .nombres("prueba")
