@@ -81,6 +81,16 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
 
         Dictionaries dictionaries1 = dictionariesRepo.save(dictionaries);
 
+        listAircrafts.forEach(aircraft -> {
+            aircraft.setDictionaries(dictionaries1);
+            this.aircraftRepo.save(aircraft);
+        });
+
+        listCarriers.forEach(carriers -> {
+            carriers.setDictionaries(dictionaries1);
+            this.carriersRepo.save(carriers);
+        });
+
         List<Segment> segments = new ArrayList<>();
 
         viajeDTO.itineraryDTO().segments().forEach(segmento -> {
@@ -112,6 +122,11 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
                 .build();
 
         Itinerary itinerary1 = itineraryRepo.save(itinerary);
+
+        segments.forEach(segment -> {
+            segment.setItinerary(itinerary1);
+            this.segmentRepo.save(segment);
+        });
 
         Price price = Price.builder()
                 .base(viajeDTO.price().base())
