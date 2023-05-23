@@ -50,7 +50,7 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
-                .authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll().and()
+                .authorizeHttpRequests().requestMatchers("/api/auth/**", "/api/itinerary/**").permitAll().and()
                 .authorizeHttpRequests().anyRequest().authenticated().and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
