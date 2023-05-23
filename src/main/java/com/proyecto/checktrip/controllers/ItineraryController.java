@@ -29,7 +29,7 @@ public class ItineraryController {
         }
 
         @PreAuthorize("hasAuthority('SCOPE_CLIENT')")
-        @PostMapping("/")
+        @PostMapping
         public ItinerariesClientDTO findAllItineraries(@RequestBody ItinerariesRequestDTO itinerariesRequestDTO){
                 return this.clienteViajeService.obtenerViajes(itinerariesRequestDTO.username());
         }
