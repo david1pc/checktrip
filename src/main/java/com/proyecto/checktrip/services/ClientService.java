@@ -8,5 +8,5 @@ public interface ClientService {
     public AccountRecoveryResponseDTO recoverAccount(AccountRecoveryRequestDTO accountRecoveryRequestDTO);
     public Boolean verifyTemporalPasswd(LoginDTO loginDTO);
     public ClientPasswdResponseDTO updateAccount(ClientPasswdRequestDTO client);
-    public Person findClientByUsername(String username);
+    public Person obtenerPersona(String username);
 }

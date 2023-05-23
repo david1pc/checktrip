@@ -3,7 +3,6 @@ package com.proyecto.checktrip.services;
 import com.proyecto.checktrip.dto.*;
 import com.proyecto.checktrip.entities.Client;
 import com.proyecto.checktrip.entities.Person;
-import com.proyecto.checktrip.entities.Role;
 import com.proyecto.checktrip.entities.RoleClient;
 import com.proyecto.checktrip.exceptions.ClientePasswordNoCoincide;
 import com.proyecto.checktrip.exceptions.PersonaNoExiste;
@@ -28,7 +27,7 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public ClientResponseDTO createClient(ClientRequestDTO clientRequestDTO) {
         personRepo.findFirstByCorreoOrUsername(clientRequestDTO.person().correo(), clientRequestDTO.person().username())
-                .ifPresent((user) -> {
+                .ifPresent(user -> {
                     throw new PersonaYaExiste("El username o correo ya esta siendo usado por alguien más");
                 });
         Person person = Person.builder()
@@ -48,8 +47,7 @@ public class ClientServiceImpl implements ClientService{
                 .persona(newPerson)
                 .build();
         Client clientSave = this.clientRepo.save(client);
-        Role role = this.roleService.findById(1).get();
-        this.roleService.createRoleClient(new RoleClient(role, clientSave));
+        this.roleService.findById(1).ifPresent(role1 -> this.roleService.createRoleClient(new RoleClient(role1, clientSave)));
         return ClientResponseDTO.builder()
                 .nombres(clientSave.getPersona().getNombres())
                 .apellidos(clientSave.getPersona().getApellidos())
@@ -60,7 +58,7 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public AccountRecoveryResponseDTO recoverAccount(AccountRecoveryRequestDTO accountRecoveryRequestDTO) {
         personRepo.findByCorreo(accountRecoveryRequestDTO.correo())
-                .ifPresent((user) -> {
+                .ifPresent(user -> {
                     String newPasswd = generarCadenaAleatoria();
                     user.setPassword(this.passwordEncoder.encode(newPasswd));
                     user.setPasswordTemporal(true);
@@ -84,7 +82,7 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     public ClientPasswdResponseDTO updateAccount(ClientPasswdRequestDTO client) {
-        Person person = obtenerPersonaVerificada(client.username());
+        Person person = obtenerPersona(client.username());
         if(this.passwordEncoder.matches(client.password(), person.getPassword())){
             person.setPasswordTemporal(false);
             person.setPassword(this.passwordEncoder.encode(client.newPassword()));
@@ -97,13 +95,10 @@ public class ClientServiceImpl implements ClientService{
         }
     }
 
-    private Person obtenerPersonaVerificada(String username){
+    @Override
+    public Person obtenerPersona(String username){
         return personRepo.findByUsername(username)
                 .orElseThrow(() -> new PersonaNoExiste("El username o contraseña es incorrecto"));
-    }
-
-    private Person obtenerPersona(String username){
-        return personRepo.findByUsername(username).get();
     }
 
     private String generarCadenaAleatoria() {
@@ -116,10 +111,5 @@ public class ClientServiceImpl implements ClientService{
             sb.append(caracteres.charAt(index));
         }
         return sb.toString();
-    }
-
-    @Override
-    public Person findClientByUsername(String username) {
-        return this.personRepo.findByUsername(username).get();
     }
 }

@@ -1,10 +1,4 @@
-rsa:
-  public-key: classpath:certs/public.pem
-  private-key: classpath:certs/private.pem
 spring:
-  h2:
-    console:
-      enabled: 'true'
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
@@ -13,7 +7,7 @@ spring:
   jpa:
     show-sql: 'true'
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
   mail:
     properties:
       mail:

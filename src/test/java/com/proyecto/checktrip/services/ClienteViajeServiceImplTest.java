@@ -2,86 +2,81 @@ package com.proyecto.checktrip.services;
 
 import com.proyecto.checktrip.controllers.AuthController;
 import com.proyecto.checktrip.dto.*;
+import com.proyecto.checktrip.entities.ClienteIdaViajes;
 import com.proyecto.checktrip.entities.Role;
+import com.proyecto.checktrip.entities.Viaje;
 import com.proyecto.checktrip.repo.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.token.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
+@Transactional
 @ActiveProfiles("test")
 class ClienteViajeServiceImplTest {
     @Autowired
-    private ClienteViajeServiceImpl clienteViajeService;
-    @Autowired
-    private ClientService clientService;
-    @Autowired
-    private RoleServiceImpl roleService;
-    @MockBean
-    private PasswordEncoder passwordEncoder;
-    @MockBean
-    private TokenService tokenService;
-    @MockBean
-    private AuthController authController;
+    private ClienteViajeService clienteViajeService;
     @MockBean
     private JwtEncoder jwtEncoder;
     @MockBean
-    private PersonRepo personRepo;
+    private JwtDecoder jwtDecoder;
     @MockBean
-    private ClientRepo clientRepo;
-    @MockBean
-    private ViajeRepo viajeRepo;
-    @MockBean
-    private ItineraryRepo itineraryRepo;
-    @MockBean
-    private SegmentRepo segmentRepo;
-    @MockBean
-    private SegmentAircraftRepo segmentAircraftRepo;
-    @MockBean
-    private OperatingRepo operatingRepo;
-    @MockBean
-    private ArrivalRepo arrivalRepo;
-    @MockBean
-    private PriceRepo priceRepo;
-    @MockBean
-    private DictionariesRepo dictionariesRepo;
-    @MockBean
-    private CarriersRepo carriersRepo;
-    @MockBean
-    private AircraftRepo aircraftRepo;
-    @MockBean
-    private RoleRepo roleRepo;
-    @MockBean
-    private RoleClientRepo roleClientRepo;
-    @Autowired
-    private RoleRepo roleRepo2;
+    private TokenService tokenService;
 
     @Test
-    public void deberiaCrearItinerario() {
-        Role role = new Role("CLIENT");
-        roleRepo2.save(role);
-        PersonDTO person = PersonDTO.builder()
-                .username("david2")
-                .apellidos("david")
-                .nombres("rodriguez")
-                .password("12345")
-                .correo("david@email.com")
+    void deberiaCrearItinerarioIda() {
+        String expected = "Se ha creado su itinerario de ida correctamente";
+        ViajeDTO viajeDTO = this.retornarViaje();
+        ClienteViajeIdaRequestDTO clienteViajeIdaRequestDTO = ClienteViajeIdaRequestDTO.builder()
+                .username("davidpc")
+                .viaje(viajeDTO)
+                .fechaCreacion(LocalDateTime.now())
                 .build();
+        String respuesta = this.clienteViajeService.guardarItinerarioIda(clienteViajeIdaRequestDTO);
+        Assertions.assertThat(expected).isEqualTo(respuesta);
+    }
 
-        ClientRequestDTO clientRequestDTO = ClientRequestDTO.builder()
-                .person(person)
+    @Test
+    void deberiaCrearItinerarioIdaVuelta() {
+        String expected = "Se ha creado su itinerario de ida y vuelta correctamente";
+        ViajeDTO viajeIdaDTO = this.retornarViaje();
+        ViajeDTO viajeVueltaDTO = this.retornarViaje();
+        ClienteViajeIdaVueltaRequestDTO clienteViajeIdaVueltaRequestDTO = ClienteViajeIdaVueltaRequestDTO.builder()
+                .username("davidpc")
+                .viajeIda(viajeIdaDTO)
+                .viajeVuelta(viajeVueltaDTO)
+                .fechaCreacion(LocalDateTime.now())
                 .build();
+        String respuesta = this.clienteViajeService.guardarItinerarioIdaVuelta(clienteViajeIdaVueltaRequestDTO);
+        Assertions.assertThat(expected).isEqualTo(respuesta);
+    }
 
-        clientService.createClient(clientRequestDTO);
+    @Test
+    void deberiaBuscarViajes() {
+        String username = "davidpc";
+        ItinerariesClientDTO itineraries = this.clienteViajeService.obtenerViajes(username);
+        Assertions.assertThat(itineraries).isNotNull();
+    }
+
+    private ViajeDTO retornarViaje(){
         CarriersDTO carriersDTO = CarriersDTO.builder()
                 .id("AC")
                 .name("ACM")
@@ -157,14 +152,7 @@ class ClienteViajeServiceImplTest {
                 .numberOfBookableSeats(5)
                 .dictionaries(dictionaries)
                 .build();
-
-        ClienteViajeIdaRequestDTO clienteViajeIdaRequestDTO = ClienteViajeIdaRequestDTO.builder()
-                .username("david2")
-                .viaje(viajeDTO)
-                .fechaCreacion(LocalDateTime.now())
-                .build();
-        ClienteViajeIdaResponseDTO clienteViajeIdaResponseDTO = this.clienteViajeService.guardarItinerarioIda(clienteViajeIdaRequestDTO);
-        Assertions.assertThat(clienteViajeIdaRequestDTO.username()).isEqualTo(clienteViajeIdaResponseDTO.username());
+        return viajeDTO;
     }
 
 }

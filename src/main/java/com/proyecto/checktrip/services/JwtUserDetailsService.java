@@ -29,7 +29,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try{
-            Person person = this.clientService.findClientByUsername(username);
+            Person person = this.clientService.obtenerPersona(username);
             List<Role> rolesClient = this.roleService.findClientRolesByUsername(username);
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
             for(Role role : rolesClient){
