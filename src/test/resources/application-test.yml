@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    url: jdbc:mysql://containers-us-west-122.railway.app:7088/railway?serverTimezone=UTC
-    password: ArkMb4tQcTAiAyHaQftW
+    url: jdbc:mysql://containers-us-west-36.railway.app:6447/railway?serverTimezone=UTC
+    password: NeYBYBGPTrKfbiYcmFYo
   jpa:
     show-sql: 'true'
     hibernate:

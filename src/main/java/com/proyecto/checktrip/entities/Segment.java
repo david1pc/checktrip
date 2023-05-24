@@ -31,6 +31,4 @@ public class Segment {
     private Arrival arrival;
     @OneToOne
     private SegmentAircraft aircraft;
-    @OneToOne
-    private Operating operating;
 }

@@ -10,9 +10,6 @@ public class SegmentMapperDTO implements Function<Segment, SegmentDTO> {
     @Override
     public SegmentDTO apply(Segment segment) {
         return SegmentDTO.builder()
-                .operating(OperatingDTO.builder()
-                        .carrierCode(segment.getOperating().getCarrierCode())
-                        .build())
                 .departure(ArrivalDTO.builder()
                         .terminal(segment.getDeparture().getTerminal())
                         .iataCode(segment.getDeparture().getIataCode())
