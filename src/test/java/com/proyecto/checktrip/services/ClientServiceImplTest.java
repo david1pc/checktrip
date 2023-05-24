@@ -47,10 +47,20 @@ class ClientServiceImplTest {
     }
 
     @Test
-    void recoverAccount() {
+    void recoverAccountError() {
         String expected = "Si el correo ingresado corresponde a una cuenta registrada en CheckTrip, le solicitamos que verifique su correo ya que se le ha enviado una contraseña temporal";
         AccountRecoveryRequestDTO accountRecoveryRequestDTO = AccountRecoveryRequestDTO.builder()
                 .correo("david1pc4afefsd@gmail.com")
+                .build();
+        AccountRecoveryResponseDTO accountRecoveryResponseDTO = this.clientService.recoverAccount(accountRecoveryRequestDTO);
+        Assertions.assertEquals(expected, accountRecoveryResponseDTO.descripcion());
+    }
+
+    @Test
+    void recoverAccount() {
+        String expected = "Si el correo ingresado corresponde a una cuenta registrada en CheckTrip, le solicitamos que verifique su correo ya que se le ha enviado una contraseña temporal";
+        AccountRecoveryRequestDTO accountRecoveryRequestDTO = AccountRecoveryRequestDTO.builder()
+                .correo("pruebchecktripp@gmail.com")
                 .build();
         AccountRecoveryResponseDTO accountRecoveryResponseDTO = this.clientService.recoverAccount(accountRecoveryRequestDTO);
         Assertions.assertEquals(expected, accountRecoveryResponseDTO.descripcion());

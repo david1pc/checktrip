@@ -27,7 +27,7 @@ class EmailServiceTest {
     @Test
     void enviarCorreo() {
         Boolean expected = true;
-        Boolean response = emailService.enviarCorreo("Recuperar contraseña", "La nueva contraseña es: adDGT24", "david1pc4@gmail.com");
+        Boolean response = emailService.enviarCorreo("Recuperar contraseña", "La nueva contraseña es: adDGT24", "pruebchecktripp@gmail.com");
         Assertions.assertEquals(expected, response);
     }
 }
