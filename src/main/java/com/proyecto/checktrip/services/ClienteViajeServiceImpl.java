@@ -51,24 +51,18 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
         List<Carriers> listCarriers = new ArrayList<>();
 
         viajeDTO.dictionaries().aircraft().forEach((aircraftDTO -> {
-            Aircraft aircraft = this.aircraftRepo.findAircraftById(aircraftDTO.id()).orElse(null);
-            if(aircraft == null){
-                aircraft = this.aircraftRepo.save(Aircraft.builder()
+            Aircraft aircraft = this.aircraftRepo.save(Aircraft.builder()
                         .id(aircraftDTO.id())
                         .name(aircraftDTO.name())
                         .build());
-            }
             listAircrafts.add(aircraft);
         }));
 
         viajeDTO.dictionaries().carriers().forEach((carriersDTO -> {
-            Carriers carriers = this.carriersRepo.findCarriersById(carriersDTO.id()).orElse(null);
-            if(carriers == null){
-                carriers = this.carriersRepo.save(Carriers.builder()
+            Carriers carriers = this.carriersRepo.save(Carriers.builder()
                         .name(carriersDTO.name())
                         .id(carriersDTO.id())
                         .build());
-            }
             listCarriers.add(carriers);
         }));
 
