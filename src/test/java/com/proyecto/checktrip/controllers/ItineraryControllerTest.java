@@ -125,12 +125,12 @@ class ItineraryControllerTest {
 
     @Test
     void findAllItineraries() throws Exception {
-        String username = "davidpc";
+        ItinerariesRequestDTO username = new ItinerariesRequestDTO("davidpc");
 
         ObjectMapper mapper = new ObjectMapper();
 
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/api/itinerary/")
+                .post("/api/itinerary")
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(username))
                 .contentType(MediaType.APPLICATION_JSON);
