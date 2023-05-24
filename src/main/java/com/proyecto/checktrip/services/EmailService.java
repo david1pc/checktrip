@@ -19,7 +19,7 @@ public class EmailService {
             helper.setSubject(asunto);
             helper.setText(contenido, true);
             helper.setTo(destinatario);
-            helper.setFrom("no_reply@unicine.com");
+            helper.setFrom("no_reply@checktrip.com");
             javaMailSender.send(mensaje);
             return true;
         }catch(Exception e){
