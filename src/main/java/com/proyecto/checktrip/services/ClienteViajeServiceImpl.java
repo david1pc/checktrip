@@ -32,8 +32,6 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
 
     private final SegmentAircraftRepo segmentAircraftRepo;
 
-    private final OperatingRepo operatingRepo;
-
     private final ArrivalRepo arrivalRepo;
 
     private final PriceRepo priceRepo;
@@ -96,7 +94,6 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
         viajeDTO.itineraryDTO().segments().forEach(segmento -> {
             Arrival arrival = this.saveArrival(segmento.arrival());
             Arrival departure = this.saveArrival(segmento.departure());
-            Operating operating = this.saveOperating(segmento.operating());
             SegmentAircraft segmentAircraft = this.saveAircraft(segmento.aircraft());
 
             Segment segment = Segment.builder()
@@ -110,7 +107,6 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
                     .numberOfStops(segmento.numberOfStops())
                     .arrival(arrival)
                     .departure(departure)
-                    .operating(operating)
                     .aircraft(segmentAircraft)
                     .build();
             Segment segment1 = this.segmentRepo.save(segment);
@@ -293,12 +289,6 @@ public class ClienteViajeServiceImpl implements ClienteViajeService{
     private SegmentAircraft saveAircraft(SegmentAircraftDTO segmentAircraftDTO){
         return this.segmentAircraftRepo.save(SegmentAircraft.builder()
                         .code(segmentAircraftDTO.code())
-                .build());
-    }
-
-    private Operating saveOperating(OperatingDTO operatingDTO){
-        return this.operatingRepo.save(Operating.builder()
-                .carrierCode(operatingDTO.carrierCode())
                 .build());
     }
 

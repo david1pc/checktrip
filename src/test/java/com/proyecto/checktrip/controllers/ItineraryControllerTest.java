@@ -55,8 +55,6 @@ class ItineraryControllerTest {
     @MockBean
     private SegmentAircraftRepo segmentAircraftRepo;
     @MockBean
-    private OperatingRepo operatingRepo;
-    @MockBean
     private ArrivalRepo arrivalRepo;
     @MockBean
     private PriceRepo priceRepo;
@@ -186,10 +184,6 @@ class ItineraryControllerTest {
                 .code("1215")
                 .build();
 
-        OperatingDTO operatingDTO = OperatingDTO.builder()
-                .carrierCode("1551")
-                .build();
-
         SegmentDTO segmentDTO = SegmentDTO.builder()
                 .arrival(arrivalDTO)
                 .departure(departureDTO)
@@ -200,7 +194,6 @@ class ItineraryControllerTest {
                 .duration("11H")
                 .carrierCode("1D")
                 .aircraft(segmentAircraftDTO)
-                .operating(operatingDTO)
                 .build();
 
         List<SegmentDTO> segmentDTOS = new ArrayList<>();
