@@ -41,6 +41,7 @@ public class AuthController {
             LoginResponseDTO loginResponseDTO = LoginResponseDTO.builder()
                     .username(login.username())
                     .token(token)
+                    .expirationTime(30 * 60)
                     .build();
             return new ResponseEntity<>(loginResponseDTO, HttpStatus.OK);
         } catch (Exception e) {

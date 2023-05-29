@@ -3,5 +3,5 @@ package com.proyecto.checktrip.dto;
 import lombok.Builder;
 
 @Builder
-public record LoginResponseDTO(String username, String token) {
+public record LoginResponseDTO(String username, String token, Integer expirationTime) {
 }
